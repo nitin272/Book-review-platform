@@ -4,71 +4,58 @@ import {
   getUserProfileService, 
   updateUserProfileService 
 } from '../../services/userService.js';
+import { createTokenCookie, clearTokenCookie } from '../../utils/cookieUtils.js';
+import { asyncHandler } from '../middlewares/errors/asyncHandler.js';
 
-export const registerUserController = async (req, res) => {
-  try {
-    const user = await registerUserService(req.body);
+export const registerUserController = asyncHandler(async (req, res) => {
+  const user = await registerUserService(req.body);
 
-    res.status(201).json({
-      success: true,
-      message: "User registered successfully",
-      data: user,
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: error.message || "User registration failed",
-    });
-  }
-};
+  res.status(201).json({
+    success: true,
+    message: "User registered successfully",
+    data: user,
+  });
+});
 
-export const loginUserController = async (req, res) => {
-  try {
-    const result = await loginUserService(req.body);
+export const loginUserController = asyncHandler(async (req, res) => {
+  const result = await loginUserService(req.body);
 
-    res.status(200).json({
-      success: true,
-      message: "Login successful",
-      data: result,
-    });
-  } catch (error) {
-    res.status(401).json({
-      success: false,
-      message: error.message || "Login failed",
-    });
-  }
-};
+  // Set HTTP-only cookie
+  createTokenCookie(result.token, res);
 
-export const getUserProfileController = async (req, res) => {
-  try {
-    const user = await getUserProfileService(req.user.id);
+  res.status(200).json({
+    success: true,
+    message: "Login successful",
+    data: {
+      user: result.user
+    },
+  });
+});
 
-    res.status(200).json({
-      success: true,
-      message: "Profile retrieved successfully",
-      data: user,
-    });
-  } catch (error) {
-    res.status(404).json({
-      success: false,
-      message: error.message || "Profile not found",
-    });
-  }
-};
+export const getUserProfileController = asyncHandler(async (req, res) => {
+  const user = await getUserProfileService(req.user.id);
 
-export const updateUserProfileController = async (req, res) => {
-  try {
-    const updatedUser = await updateUserProfileService(req.user.id, req.body);
+  res.status(200).json({
+    success: true,
+    message: "Profile retrieved successfully",
+    data: user,
+  });
+});
 
-    res.status(200).json({
-      success: true,
-      message: "Profile updated successfully",
-      data: updatedUser,
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: error.message || "Profile update failed",
-    });
-  }
-};
+export const updateUserProfileController = asyncHandler(async (req, res) => {
+  const updatedUser = await updateUserProfileService(req.user.id, req.body);
+
+  res.status(200).json({
+    success: true,
+    message: "Profile updated successfully",
+    data: updatedUser,
+  });
+});
+export const logoutUserController = asyncHandler(async (req, res) => {
+  clearTokenCookie(res);
+
+  res.status(200).json({
+    success: true,
+    message: "Logged out successfully",
+  });
+});

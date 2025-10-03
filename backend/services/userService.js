@@ -1,40 +1,40 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { createUser, findUserByEmail, findUserById, updateUser } from "../repositories/userRepository.js";
+import { ValidationError, ConflictError, AuthenticationError, NotFoundError } from "../http/middlewares/errors/AppError.js";
+import { sanitizeUserData, createUserResponse } from "../domain/userValidation.js";
 
 export const registerUserService = async (userData) => {
-  const { name, email, password } = userData;
-  
-  const existingUser = await findUserByEmail(email);
+  // Use domain validation
+  const sanitizedData = sanitizeUserData(userData);
+
+  const existingUser = await findUserByEmail(sanitizedData.email);
   if (existingUser) {
-    throw new Error("User with this email already exists");
+    throw new ConflictError("User with this email already exists");
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(sanitizedData.password, 10);
   const newUser = await createUser({
-    name: name.trim(),
-    email: email.toLowerCase(),
+    name: sanitizedData.name,
+    email: sanitizedData.email,
     password: hashedPassword,
   });
 
-  return {
-    id: newUser._id,
-    name: newUser.name,
-    email: newUser.email,
-  };
+  return createUserResponse(newUser);
 };
+
 export const loginUserService = async (loginData) => {
   const { email, password } = loginData;
 
   const user = await findUserByEmail(email.toLowerCase());
   if (!user) {
-    throw new Error("Invalid email or password");
+    throw new AuthenticationError("Invalid email or password");
   }
 
   // Check password
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
-    throw new Error("Invalid email or password");
+    throw new AuthenticationError("Invalid email or password");
   }
 
   // Generate JWT token
@@ -58,7 +58,7 @@ export const loginUserService = async (loginData) => {
 export const getUserProfileService = async (userId) => {
   const user = await findUserById(userId);
   if (!user) {
-    throw new Error("User not found");
+    throw new NotFoundError("User not found");
   }
 
   return {
@@ -76,7 +76,7 @@ export const updateUserProfileService = async (userId, updateData) => {
   // Find user
   const user = await findUserById(userId);
   if (!user) {
-    throw new Error("User not found");
+    throw new NotFoundError("User not found");
   }
 
   const updates = {};
@@ -89,7 +89,7 @@ export const updateUserProfileService = async (userId, updateData) => {
     if (emailLower !== user.email) {
       const existingUser = await findUserByEmail(emailLower);
       if (existingUser) {
-        throw new Error("Email already in use");
+        throw new ConflictError("Email already in use");
       }
       updates.email = emailLower;
     }
@@ -98,12 +98,12 @@ export const updateUserProfileService = async (userId, updateData) => {
   // Update password if provided
   if (newPassword) {
     if (!currentPassword) {
-      throw new Error("Current password is required to change password");
+      throw new ValidationError("Current password is required to change password");
     }
 
     const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password);
     if (!isCurrentPasswordValid) {
-      throw new Error("Current password is incorrect");
+      throw new AuthenticationError("Current password is incorrect");
     }
 
     updates.password = await bcrypt.hash(newPassword, 10);
