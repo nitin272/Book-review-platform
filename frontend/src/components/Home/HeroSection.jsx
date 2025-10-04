@@ -112,6 +112,8 @@ const HeroSection = () => {
                                 </Button>
 
                                 <Button
+                                    component={Link}
+                                    to="/books"
                                     variant="outlined"
                                     size="large"
                                     sx={{

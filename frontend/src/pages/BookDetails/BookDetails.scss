@@ -1,0 +1,14 @@
+.book-details-page {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .book-details-page {
+    .MuiContainer-root {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+}

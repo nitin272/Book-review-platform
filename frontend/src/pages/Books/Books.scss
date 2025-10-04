@@ -1,0 +1,23 @@
+.books-page {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .books-page {
+    .book-card .MuiCardContent-root > .MuiBox-root:first-of-type {
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+      
+      .MuiBox-root:first-of-type {
+        align-self: center;
+      }
+      
+      .MuiBox-root:nth-of-type(2) {
+        text-align: left;
+      }
+    }
+  }
+}
