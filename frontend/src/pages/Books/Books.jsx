@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { useTheme } from '@mui/material/styles';
 import { useTheme as useCustomTheme } from '../../context/ThemeContext';
@@ -42,6 +42,7 @@ const Books = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const { isDarkMode } = useCustomTheme();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // State management
   const [books, setBooks] = useState([]);
@@ -120,6 +121,15 @@ const Books = () => {
   ];
 
   const genres = ['Fiction', 'Science Fiction', 'Romance', 'Mystery', 'Thriller', 'Fantasy', 'Biography', 'History', 'Dystopian'];
+
+  // Handle URL search parameters
+  useEffect(() => {
+    const urlSearchTerm = searchParams.get('search');
+    if (urlSearchTerm && urlSearchTerm !== searchTerm) {
+      setSearchTerm(urlSearchTerm);
+      setCurrentPage(1);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     fetchBooks();
