@@ -226,7 +226,6 @@
   }
 }
 
-// Loading states
 .form-field.loading {
   .MuiOutlinedInput-root {
     background-color: #f8fafc;
@@ -237,14 +236,12 @@
   }
 }
 
-// Success states
 .form-field.success {
   .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
     border-color: #10b981;
   }
 }
 
-// Error states
 .form-field.error {
   .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
     border-color: #ef4444;

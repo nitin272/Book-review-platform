@@ -1,6 +1,5 @@
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import { useTheme as useCustomTheme } from '../../context/ThemeContext';
 import HeroSection from '../../components/Home/HeroSection';
 import StatsSection from '../../components/Home/StatsSection';
 import FeaturesSection from '../../components/Home/FeaturesSection';
@@ -10,7 +9,6 @@ import './Home.scss';
 
 const Home = () => {
   const theme = useTheme();
-  const { isDarkMode } = useCustomTheme();
 
   return (
     <Box

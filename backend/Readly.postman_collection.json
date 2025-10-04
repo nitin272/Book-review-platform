@@ -1,0 +1,2059 @@
+{
+	"info": {
+		"_postman_id": "1452b093-c7ed-4086-aeaf-d33aee0cb83d",
+		"name": "Readly",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32417335"
+	},
+	"item": [
+		{
+			"name": "Health",
+			"item": [
+				{
+					"name": "Health check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"health"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/health",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"health"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "125"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"7d-P2+0fBS3nYbFwiT0nER6xT3mRIg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 19:20:02 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Server is running\",\n    \"timestamp\": \"2025-10-04T19:20:02.094Z\",\n    \"uptime\": 703,\n    \"environment\": \"development\"\n}"
+						},
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/health",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"health"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "125"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"7d-P2+0fBS3nYbFwiT0nER6xT3mRIg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 19:20:02 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"OK\",\n    \"message\": \"Server is running\",\n    \"timestamp\": \"2025-10-04T19:20:02.094Z\",\n    \"uptime\": 703,\n    \"environment\": \"development\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Resister",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/auth/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "221"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"dd-J1AX5CpuS2KMrkASycLXizzgUwk\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 19:27:50 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"User registered successfully\",\n    \"data\": {\n        \"id\": \"68e17536594848978a72fb96\",\n        \"name\": \"John Doe\",\n        \"email\": \"john@example.com\",\n        \"createdAt\": \"2025-10-04T19:27:50.271Z\",\n        \"updatedAt\": \"2025-10-04T19:27:50.271Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/auth/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYxNjAsImV4cCI6MTc2MDIxMDk2MH0.PsUpOoj79Q3ddU1t1TNkd4pzx8C8h7-b4kUAfwrRVwQ; Path=/; Expires=Sat, 11 Oct 2025 19:29:20 GMT; HttpOnly; SameSite=Strict"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "283"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"11b-BZeDRw4/Ytwj+qtmPTUNE6Ki87E\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 19:29:20 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Login successful\",\n    \"data\": {\n        \"user\": {\n            \"name\": \"John Doe\",\n            \"email\": \"john@example.com\"\n        },\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYxNjAsImV4cCI6MTc2MDIxMDk2MH0.PsUpOoj79Q3ddU1t1TNkd4pzx8C8h7-b4kUAfwrRVwQ\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "get  user profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "[{\"key\":\"Cookie\",\"value\":\"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYyODAsImV4cCI6MTc2MDIxMTA4MH0.lVErYLovhhPUdwgn11YNMIMrnwj9drn2y5BUGItrLig\",\"enabled\":true}]",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYyODAsImV4cCI6MTc2MDIxMTA4MH0.lVErYLovhhPUdwgn11YNMIMrnwj9drn2y5BUGItrLig"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/auth/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"auth",
+								"profile"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Cookie",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYyODAsImV4cCI6MTc2MDIxMTA4MH0.lVErYLovhhPUdwgn11YNMIMrnwj9drn2y5BUGItrLig"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/auth/profile",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"auth",
+										"profile"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "223"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"df-gU+Uoa0prLzLlazzpfuyxDRhyo8\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 19:51:39 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Profile retrieved successfully\",\n    \"data\": {\n        \"id\": \"68e17536594848978a72fb96\",\n        \"name\": \"John Doe\",\n        \"email\": \"john@example.com\",\n        \"createdAt\": \"2025-10-04T19:27:50.271Z\",\n        \"updatedAt\": \"2025-10-04T19:27:50.271Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "update user",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYyODAsImV4cCI6MTc2MDIxMTA4MH0.lVErYLovhhPUdwgn11YNMIMrnwj9drn2y5BUGItrLig"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Updated\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/auth/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"auth",
+								"profile"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYyODAsImV4cCI6MTc2MDIxMTA4MH0.lVErYLovhhPUdwgn11YNMIMrnwj9drn2y5BUGItrLig"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"John Updated\"\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/auth/profile",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"auth",
+										"profile"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "186"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"ba-MpLbxUUuh2rHgyZWkEnLiILAM5k\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 19:58:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Profile updated successfully\",\n    \"data\": {\n        \"id\": \"68e17536594848978a72fb96\",\n        \"name\": \"John Updated\",\n        \"email\": \"john@example.com\",\n        \"updatedAt\": \"2025-10-04T19:58:41.051Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "add book",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYyODAsImV4cCI6MTc2MDIxMTA4MH0.lVErYLovhhPUdwgn11YNMIMrnwj9drn2y5BUGItrLig"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"The Great Gatsby\",\n    \"author\": \"F. Scott Fitzgerald\",\n    \"description\": \"A classic American novel set in the Jazz Age, exploring themes of wealth, love, and the American Dream.\",\n    \"genre\": \"Fiction\",\n    \"publishedYear\": 1925\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/books",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"books"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYyODAsImV4cCI6MTc2MDIxMTA4MH0.lVErYLovhhPUdwgn11YNMIMrnwj9drn2y5BUGItrLig"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"The Great Gatsby\",\n    \"author\": \"F. Scott Fitzgerald\",\n    \"description\": \"A classic American novel set in the Jazz Age, exploring themes of wealth, love, and the American Dream.\",\n    \"genre\": \"Fiction\",\n    \"publishedYear\": 1925\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/books",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"books"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "385"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"181-AvCld1a65aGKw5m7i0r/B9fg/uc\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 20:00:51 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Book created successfully\",\n    \"data\": {\n        \"id\": \"68e17cf351f63861d8cb2a08\",\n        \"title\": \"The Great Gatsby\",\n        \"author\": \"F. Scott Fitzgerald\",\n        \"description\": \"A classic American novel set in the Jazz Age, exploring themes of wealth, love, and the American Dream.\",\n        \"genre\": \"Fiction\",\n        \"publishedYear\": 1925,\n        \"averageRating\": 0,\n        \"reviewCount\": 0,\n        \"createdAt\": \"2025-10-04T20:00:51.707Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get all books",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/books",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"books"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/books",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"books"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "587"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"24b-bkK8Iq7hF5doViRB7J6UBJcGcCI\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 20:01:45 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Books retrieved successfully\",\n    \"data\": {\n        \"books\": [\n            {\n                \"id\": \"68e17cf351f63861d8cb2a08\",\n                \"title\": \"The Great Gatsby\",\n                \"author\": \"F. Scott Fitzgerald\",\n                \"description\": \"A classic American novel set in the Jazz Age, exploring themes of wealth, love, and the American Dream.\",\n                \"genre\": \"Fiction\",\n                \"publishedYear\": 1925,\n                \"averageRating\": 0,\n                \"reviewCount\": 0,\n                \"addedBy\": {\n                    \"_id\": \"68e17536594848978a72fb96\",\n                    \"name\": \"John Updated\",\n                    \"email\": \"john@example.com\"\n                },\n                \"createdAt\": \"2025-10-04T20:00:51.707Z\"\n            }\n        ],\n        \"pagination\": {\n            \"currentPage\": 1,\n            \"totalPages\": 1,\n            \"totalBooks\": 1,\n            \"hasNext\": false,\n            \"hasPrev\": false\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get book via filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/books?page=1&limit=5&genre=Fiction&search=gatsby",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"books"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "genre",
+									"value": "Fiction"
+								},
+								{
+									"key": "search",
+									"value": "gatsby"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/books?page=1&limit=5&genre=Fiction&search=gatsby",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"books"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										},
+										{
+											"key": "genre",
+											"value": "Fiction"
+										},
+										{
+											"key": "search",
+											"value": "gatsby"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "587"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"24b-bkK8Iq7hF5doViRB7J6UBJcGcCI\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 20:02:35 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Books retrieved successfully\",\n    \"data\": {\n        \"books\": [\n            {\n                \"id\": \"68e17cf351f63861d8cb2a08\",\n                \"title\": \"The Great Gatsby\",\n                \"author\": \"F. Scott Fitzgerald\",\n                \"description\": \"A classic American novel set in the Jazz Age, exploring themes of wealth, love, and the American Dream.\",\n                \"genre\": \"Fiction\",\n                \"publishedYear\": 1925,\n                \"averageRating\": 0,\n                \"reviewCount\": 0,\n                \"addedBy\": {\n                    \"_id\": \"68e17536594848978a72fb96\",\n                    \"name\": \"John Updated\",\n                    \"email\": \"john@example.com\"\n                },\n                \"createdAt\": \"2025-10-04T20:00:51.707Z\"\n            }\n        ],\n        \"pagination\": {\n            \"currentPage\": 1,\n            \"totalPages\": 1,\n            \"totalBooks\": 1,\n            \"hasNext\": false,\n            \"hasPrev\": false\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get book by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/books/68e17cf351f63861d8cb2a08",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"books",
+								"68e17cf351f63861d8cb2a08"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/books/68e17cf351f63861d8cb2a08",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"books",
+										"68e17cf351f63861d8cb2a08"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "520"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"208-YNEsmTnnCKq68WMJEB1V0BRjGTE\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 20:03:40 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Book retrieved successfully\",\n    \"data\": {\n        \"id\": \"68e17cf351f63861d8cb2a08\",\n        \"title\": \"The Great Gatsby\",\n        \"author\": \"F. Scott Fitzgerald\",\n        \"description\": \"A classic American novel set in the Jazz Age, exploring themes of wealth, love, and the American Dream.\",\n        \"genre\": \"Fiction\",\n        \"publishedYear\": 1925,\n        \"averageRating\": 0,\n        \"reviewCount\": 0,\n        \"addedBy\": {\n            \"_id\": \"68e17536594848978a72fb96\",\n            \"name\": \"John Updated\",\n            \"email\": \"john@example.com\"\n        },\n        \"createdAt\": \"2025-10-04T20:00:51.707Z\",\n        \"updatedAt\": \"2025-10-04T20:00:51.707Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Update book",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYyODAsImV4cCI6MTc2MDIxMTA4MH0.lVErYLovhhPUdwgn11YNMIMrnwj9drn2y5BUGItrLig"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"The Great Gatsby - Updated\",\n    \"description\": \"Updated description of this classic novel.\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/books/68e17cf351f63861d8cb2a08",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"books",
+								"68e17cf351f63861d8cb2a08"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYyODAsImV4cCI6MTc2MDIxMTA4MH0.lVErYLovhhPUdwgn11YNMIMrnwj9drn2y5BUGItrLig"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"The Great Gatsby - Updated\",\n    \"description\": \"Updated description of this classic novel.\"\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/books/68e17cf351f63861d8cb2a08",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"books",
+										"68e17cf351f63861d8cb2a08"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "334"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"14e-CUOs8OcPbGigZKiT6XRR8DGkw9I\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 20:10:02 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Book updated successfully\",\n    \"data\": {\n        \"id\": \"68e17cf351f63861d8cb2a08\",\n        \"title\": \"The Great Gatsby - Updated\",\n        \"author\": \"F. Scott Fitzgerald\",\n        \"description\": \"Updated description of this classic novel.\",\n        \"genre\": \"Fiction\",\n        \"publishedYear\": 1925,\n        \"averageRating\": 0,\n        \"reviewCount\": 0,\n        \"updatedAt\": \"2025-10-04T20:10:02.198Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "get our book",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYyODAsImV4cCI6MTc2MDIxMTA4MH0.lVErYLovhhPUdwgn11YNMIMrnwj9drn2y5BUGItrLig"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/books/user/my-books",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"books",
+								"user",
+								"my-books"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYyODAsImV4cCI6MTc2MDIxMTA4MH0.lVErYLovhhPUdwgn11YNMIMrnwj9drn2y5BUGItrLig"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:5000/api/books/user/my-books",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"books",
+										"user",
+										"my-books"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "285"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"11d-SUil3O6tf0IKFUpFBgxKTKrohk4\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 20:12:07 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"User books retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": \"68e17cf351f63861d8cb2a08\",\n            \"title\": \"The Great Gatsby - Updated\",\n            \"author\": \"F. Scott Fitzgerald\",\n            \"genre\": \"Fiction\",\n            \"publishedYear\": 1925,\n            \"averageRating\": 0,\n            \"reviewCount\": 0,\n            \"createdAt\": \"2025-10-04T20:00:51.707Z\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete book",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYyODAsImV4cCI6MTc2MDIxMTA4MH0.lVErYLovhhPUdwgn11YNMIMrnwj9drn2y5BUGItrLigeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYyODAsImV4cCI6MTc2MDIxMTA4MH0.lVErYLovhhPUdwgn11YNMIMrnwj9drn2y5BUGItrLig"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/books/68e17cf351f63861d8cb2a08",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"books",
+								"68e17cf351f63861d8cb2a08"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYyODAsImV4cCI6MTc2MDIxMTA4MH0.lVErYLovhhPUdwgn11YNMIMrnwj9drn2y5BUGItrLigeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDYyODAsImV4cCI6MTc2MDIxMTA4MH0.lVErYLovhhPUdwgn11YNMIMrnwj9drn2y5BUGItrLig"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:5000/api/books/68e17cf351f63861d8cb2a08",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"books",
+										"68e17cf351f63861d8cb2a08"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "54"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"36-9Wsh+Ulh36Uhq6ylxG5pCkcdTlA\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 20:13:39 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Book deleted successfully\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Review",
+			"item": [
+				{
+					"name": "Add review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZTE4MDc0MjhiY2E3ZDJlNTNmMGQzMSIsImVtYWlsIjoiam9objJAZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDg5NTksImV4cCI6MTc2MDIxMzc1OX0.9epWgnXvBALWB9us70rjrXpUPNxHs_F63WblDH-mD-k"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"bookId\": \"68e1801028bca7d2e53f0d2e\",\n    \"rating\": 5,\n    \"reviewText\": \"This is an excellent book! The character development is outstanding and the plot keeps you engaged throughout.\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/reviews",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"reviews"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZTE4MDc0MjhiY2E3ZDJlNTNmMGQzMSIsImVtYWlsIjoiam9objJAZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDg5NTksImV4cCI6MTc2MDIxMzc1OX0.9epWgnXvBALWB9us70rjrXpUPNxHs_F63WblDH-mD-k"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bookId\": \"68e1801028bca7d2e53f0d2e\",\n    \"rating\": 5,\n    \"reviewText\": \"This is an excellent book! The character development is outstanding and the plot keeps you engaged throughout.\"\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/reviews",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"reviews"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "309"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"135-AJoQcbcK++ksvRyqKDyBcaRfL18\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 20:16:56 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Review created successfully\",\n    \"data\": {\n        \"id\": \"68e180b828bca7d2e53f0d3a\",\n        \"bookId\": \"68e1801028bca7d2e53f0d2e\",\n        \"rating\": 5,\n        \"reviewText\": \"This is an excellent book! The character development is outstanding and the plot keeps you engaged throughout.\",\n        \"createdAt\": \"2025-10-04T20:16:56.120Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get review",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/reviews/book/68e1801028bca7d2e53f0d2e",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"reviews",
+								"book",
+								"68e1801028bca7d2e53f0d2e"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/reviews/book/68e1801028bca7d2e53f0d2e",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"reviews",
+										"book",
+										"68e1801028bca7d2e53f0d2e"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "488"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1e8-c9P7lFAf3Uleiq+LLC9PN7evJzo\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 20:18:00 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Reviews retrieved successfully\",\n    \"data\": {\n        \"reviews\": [\n            {\n                \"id\": \"68e180b828bca7d2e53f0d3a\",\n                \"rating\": 5,\n                \"reviewText\": \"This is an excellent book! The character development is outstanding and the plot keeps you engaged throughout.\",\n                \"user\": {\n                    \"id\": \"68e1807428bca7d2e53f0d31\",\n                    \"name\": \"John Doe 2\"\n                },\n                \"createdAt\": \"2025-10-04T20:16:56.120Z\",\n                \"updatedAt\": \"2025-10-04T20:16:56.120Z\"\n            }\n        ],\n        \"stats\": {\n            \"averageRating\": 5,\n            \"totalReviews\": 1,\n            \"ratingDistribution\": {\n                \"1\": 0,\n                \"2\": 0,\n                \"3\": 0,\n                \"4\": 0,\n                \"5\": 1\n            }\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get single review",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/reviews/68e180b828bca7d2e53f0d3a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"reviews",
+								"68e180b828bca7d2e53f0d3a"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/reviews/68e180b828bca7d2e53f0d3a",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"reviews",
+										"68e180b828bca7d2e53f0d3a"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "439"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1b7-t81jPmHhORinVsPz2O2aTzNZMdQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 20:19:20 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Review retrieved successfully\",\n    \"data\": {\n        \"id\": \"68e180b828bca7d2e53f0d3a\",\n        \"rating\": 5,\n        \"reviewText\": \"This is an excellent book! The character development is outstanding and the plot keeps you engaged throughout.\",\n        \"user\": {\n            \"id\": \"68e1807428bca7d2e53f0d31\",\n            \"name\": \"John Doe 2\",\n            \"email\": \"john2@example.com\"\n        },\n        \"bookId\": \"68e1801028bca7d2e53f0d2e\",\n        \"createdAt\": \"2025-10-04T20:16:56.120Z\",\n        \"updatedAt\": \"2025-10-04T20:16:56.120Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Update review",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZTE4MDc0MjhiY2E3ZDJlNTNmMGQzMSIsImVtYWlsIjoiam9objJAZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDg5NTksImV4cCI6MTc2MDIxMzc1OX0.9epWgnXvBALWB9us70rjrXpUPNxHs_F63WblDH-mD-k"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rating\": 4,\n    \"reviewText\": \"Updated review: Still a great book, but I noticed some pacing issues on second read.\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/reviews/68e180b828bca7d2e53f0d3a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"reviews",
+								"68e180b828bca7d2e53f0d3a"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZTE4MDc0MjhiY2E3ZDJlNTNmMGQzMSIsImVtYWlsIjoiam9objJAZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDg5NTksImV4cCI6MTc2MDIxMzc1OX0.9epWgnXvBALWB9us70rjrXpUPNxHs_F63WblDH-mD-k"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"rating\": 4,\n    \"reviewText\": \"Updated review: Still a great book, but I noticed some pacing issues on second read.\"\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/reviews/68e180b828bca7d2e53f0d3a",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"reviews",
+										"68e180b828bca7d2e53f0d3a"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "247"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"f7-jXKUx+EUBa+fnzhYnq+848hL/Vg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 20:21:03 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Review updated successfully\",\n    \"data\": {\n        \"id\": \"68e180b828bca7d2e53f0d3a\",\n        \"rating\": 4,\n        \"reviewText\": \"Updated review: Still a great book, but I noticed some pacing issues on second read.\",\n        \"updatedAt\": \"2025-10-04T20:21:02.954Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete review",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZTE4MDc0MjhiY2E3ZDJlNTNmMGQzMSIsImVtYWlsIjoiam9objJAZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDg5NTksImV4cCI6MTc2MDIxMzc1OX0.9epWgnXvBALWB9us70rjrXpUPNxHs_F63WblDH-mD-k"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/reviews/68e180b828bca7d2e53f0d3a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"reviews",
+								"68e180b828bca7d2e53f0d3a"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZTE4MDc0MjhiY2E3ZDJlNTNmMGQzMSIsImVtYWlsIjoiam9objJAZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDg5NTksImV4cCI6MTc2MDIxMzc1OX0.9epWgnXvBALWB9us70rjrXpUPNxHs_F63WblDH-mD-k"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:5000/api/reviews/68e180b828bca7d2e53f0d3a",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"reviews",
+										"68e180b828bca7d2e53f0d3a"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "56"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"38-jxJ1JtcaBbSo9ccWodgsZETBEvI\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 20:22:22 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Review deleted successfully\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get my review",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZTE4MDc0MjhiY2E3ZDJlNTNmMGQzMSIsImVtYWlsIjoiam9objJAZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDg5NTksImV4cCI6MTc2MDIxMzc1OX0.9epWgnXvBALWB9us70rjrXpUPNxHs_F63WblDH-mD-k"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/reviews/user/my-reviews",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"reviews",
+								"user",
+								"my-reviews"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZTE4MDc0MjhiY2E3ZDJlNTNmMGQzMSIsImVtYWlsIjoiam9objJAZXhhbXBsZS5jb20iLCJpYXQiOjE3NTk2MDg5NTksImV4cCI6MTc2MDIxMzc1OX0.9epWgnXvBALWB9us70rjrXpUPNxHs_F63WblDH-mD-k"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:5000/api/reviews/user/my-reviews",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"reviews",
+										"user",
+										"my-reviews"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:4500"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "421"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1a5-rhN7S8oVmQszxOrwjxi+e7CSpqs\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 04 Oct 2025 20:23:34 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"User reviews retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": \"68e182084689aab001e2fcd1\",\n            \"rating\": 5,\n            \"reviewText\": \"This is an excellent book! The character development is outstanding and the plot keeps you engaged throughout.\",\n            \"book\": {\n                \"id\": \"68e1801028bca7d2e53f0d2e\",\n                \"title\": \"The Great Gatsby\",\n                \"author\": \"F. Scott Fitzgerald\"\n            },\n            \"createdAt\": \"2025-10-04T20:22:32.046Z\",\n            \"updatedAt\": \"2025-10-04T20:22:32.046Z\"\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}

@@ -15,6 +15,8 @@ const router = express.Router();
 router.get('/book/:bookId', getBookReviewsController);
 router.get('/:id', getReviewByIdController); 
 
+
+router.post('/', authenticate, createReviewController);
 router.put('/:id', authenticate, updateReviewController); 
 router.delete('/:id', authenticate, deleteReviewController);
 

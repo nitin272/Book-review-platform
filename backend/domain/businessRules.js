@@ -1,4 +1,4 @@
-// Pure business logic functions - no external dependencies
+
 
 export function canUserEditBook(book, userId) {
   if (!book || !userId) {
@@ -26,8 +26,7 @@ export function isValidObjectId(id) {
   if (!id || typeof id !== 'string') {
     return false;
   }
-  
-  // Basic MongoDB ObjectId validation (24 hex characters)
+
   const objectIdRegex = /^[0-9a-fA-F]{24}$/;
   return objectIdRegex.test(id);
 }

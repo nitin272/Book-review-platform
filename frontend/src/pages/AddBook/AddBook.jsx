@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { bookAPI } from '../../services/api';
 import { useTheme } from '@mui/material/styles';
 import { useTheme as useCustomTheme } from '../../context/ThemeContext';
 import {
@@ -16,18 +17,16 @@ import {
   ArrowBack,
   Save,
   MenuBook,
-  Person,
   Category
 } from '@mui/icons-material';
 import './AddBook.scss';
 
 const AddBook = () => {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
   const theme = useTheme();
   const { isDarkMode } = useCustomTheme();
 
-  // Form state
   const [formData, setFormData] = useState({
     title: '',
     author: '',
@@ -39,11 +38,10 @@ const AddBook = () => {
     publisher: ''
   });
 
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Genre options
   const genres = [
     'Fiction',
     'Non-Fiction',
@@ -69,8 +67,14 @@ const AddBook = () => {
     'Children',
     'Other'
   ];
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
-  // Redirect if not logged in
   if (!user) {
     navigate('/login');
     return null;
@@ -82,8 +86,6 @@ const AddBook = () => {
       ...prev,
       [name]: value
     }));
-    
-    // Clear errors when user starts typing
     if (error) setError('');
     if (success) setSuccess('');
   };
@@ -125,27 +127,22 @@ const AddBook = () => {
       return;
     }
     
-    setLoading(true);
+    setSubmitting(true);
     setError('');
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Mock successful response
-      const newBook = {
-        ...formData,
-        _id: Date.now().toString(),
-        addedBy: user,
-        createdAt: new Date().toISOString(),
-        averageRating: 0,
-        reviewCount: 0
+      const bookData = {
+        title: formData.title,
+        author: formData.author,
+        description: formData.description,
+        genre: formData.genre,
+        publishedYear: parseInt(formData.publishedYear)
       };
+
+      await bookAPI.createBook(bookData);
       
-      console.log('Book added:', newBook);
       setSuccess('Book added successfully!');
-      
-      // Redirect to books list after a short delay
+
       setTimeout(() => {
         navigate('/books');
       }, 1500);
@@ -153,7 +150,7 @@ const AddBook = () => {
     } catch (err) {
       setError('Failed to add book. Please try again.');
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -369,9 +366,11 @@ const AddBook = () => {
                   onChange={handleChange}
                   required
                   placeholder="2023"
-                  inputProps={{
-                    min: 1000,
-                    max: new Date().getFullYear()
+                  slotProps={{
+                    htmlInput: {
+                      min: 1000,
+                      max: new Date().getFullYear()
+                    }
                   }}
                 />
 
@@ -383,8 +382,10 @@ const AddBook = () => {
                   value={formData.pages}
                   onChange={handleChange}
                   placeholder="350"
-                  inputProps={{
-                    min: 1
+                  slotProps={{
+                    htmlInput: {
+                      min: 1
+                    }
                   }}
                 />
 
@@ -414,7 +415,7 @@ const AddBook = () => {
             <Button
               type="button"
               onClick={handleReset}
-              disabled={loading}
+              disabled={submitting}
               variant="outlined"
               sx={{
                 borderRadius: 2,
@@ -435,9 +436,9 @@ const AddBook = () => {
             
             <Button
               type="submit"
-              disabled={loading}
+              disabled={submitting}
               variant="contained"
-              startIcon={loading ? <CircularProgress size={18} color="inherit" /> : <Save />}
+              startIcon={submitting ? <CircularProgress size={18} color="inherit" /> : <Save />}
               sx={{
                 borderRadius: 2,
                 textTransform: 'none',
@@ -457,7 +458,7 @@ const AddBook = () => {
                 }
               }}
             >
-              {loading ? 'Adding...' : 'Add Book'}
+              {submitting ? 'Adding...' : 'Add Book'}
             </Button>
           </Box>
         </Box>

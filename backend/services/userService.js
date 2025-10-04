@@ -3,9 +3,11 @@ import jwt from "jsonwebtoken";
 import { createUser, findUserByEmail, findUserById, updateUser } from "../repositories/userRepository.js";
 import { ValidationError, ConflictError, AuthenticationError, NotFoundError } from "../http/middlewares/errors/AppError.js";
 import { sanitizeUserData, createUserResponse } from "../domain/userValidation.js";
+import { storeUserDataRedis, getUserDataFromRedis } from "../repositories/redis/user.redis.repository.js";
+
 
 export const registerUserService = async (userData) => {
-  // Use domain validation
+
   const sanitizedData = sanitizeUserData(userData);
 
   const existingUser = await findUserByEmail(sanitizedData.email);
@@ -20,31 +22,33 @@ export const registerUserService = async (userData) => {
     password: hashedPassword,
   });
 
+  storeUserDataRedis(sanitizedData.email, newUser);
+
+
+
   return createUserResponse(newUser);
 };
 
 export const loginUserService = async (loginData) => {
   const { email, password } = loginData;
 
-  const user = await findUserByEmail(email.toLowerCase());
+  const user = (await getUserDataFromRedis(email.toLowerCase())) || (await findUserByEmail(email.toLowerCase()));
+
   if (!user) {
     throw new AuthenticationError("Invalid email or password");
   }
 
-  // Check password
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
     throw new AuthenticationError("Invalid email or password");
   }
 
-  // Generate JWT token
   const token = jwt.sign(
     { id: user._id, email: user.email },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
   );
 
-  // Return user data and token
   return {
     user: {
       id: user._id,
@@ -57,6 +61,7 @@ export const loginUserService = async (loginData) => {
 
 export const getUserProfileService = async (userId) => {
   const user = await findUserById(userId);
+
   if (!user) {
     throw new NotFoundError("User not found");
   }
@@ -73,7 +78,6 @@ export const getUserProfileService = async (userId) => {
 export const updateUserProfileService = async (userId, updateData) => {
   const { name, email, currentPassword, newPassword } = updateData;
 
-  // Find user
   const user = await findUserById(userId);
   if (!user) {
     throw new NotFoundError("User not found");
@@ -95,7 +99,6 @@ export const updateUserProfileService = async (userId, updateData) => {
     }
   }
 
-  // Update password if provided
   if (newPassword) {
     if (!currentPassword) {
       throw new ValidationError("Current password is required to change password");
@@ -109,7 +112,7 @@ export const updateUserProfileService = async (userId, updateData) => {
     updates.password = await bcrypt.hash(newPassword, 10);
   }
 
-  // Update user
+
   const updatedUser = await updateUser(userId, updates);
 
   return {

@@ -3,9 +3,9 @@ export const createTokenCookie = (token, res) => {
     expires: new Date(
       Date.now() + (process.env.JWT_COOKIE_EXPIRES_IN || 7) * 24 * 60 * 60 * 1000
     ),
-    httpOnly: true, // Prevents XSS attacks
-    secure: process.env.NODE_ENV === 'production', // HTTPS only in production
-    sameSite: 'strict', 
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
   };
 
   res.cookie('token', token, cookieOptions);

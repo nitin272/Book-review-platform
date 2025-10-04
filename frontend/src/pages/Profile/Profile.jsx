@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { bookAPI, reviewAPI } from '../../services/api';
 import { useTheme } from '@mui/material/styles';
 import { useTheme as useCustomTheme } from '../../context/ThemeContext';
 import {
@@ -20,7 +21,8 @@ import {
   DialogActions,
   Skeleton,
   Fade,
-  Zoom
+  Zoom,
+  CircularProgress
 } from '@mui/material';
 import {
   MenuBook,
@@ -35,105 +37,32 @@ import {
   BookmarkBorder
 } from '@mui/icons-material';
 import ReviewsChart from '../../components/Charts/ReviewsChart';
+import RatingDistributionChart from '../../components/Charts/RatingDistributionChart';
 
 const Profile = () => {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
   const theme = useTheme();
   const { isDarkMode } = useCustomTheme();
 
-  // State management
   const [activeTab, setActiveTab] = useState(0);
   const [userBooks, setUserBooks] = useState([]);
   const [userReviews, setUserReviews] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [dataLoading, setDataLoading] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteType, setDeleteType] = useState('');
 
-  // Mock data with more realistic content
-  const mockUserBooks = [
-    {
-      _id: '1',
-      title: 'The Psychology of Programming',
-      author: 'Gerald M. Weinberg',
-      genre: 'Technology',
-      publishedYear: 1998,
-      averageRating: 4.3,
-      reviewCount: 89,
-      createdAt: '2024-01-15'
-    },
-    {
-      _id: '2',
-      title: 'Clean Code: A Handbook of Agile Software Craftsmanship',
-      author: 'Robert C. Martin',
-      genre: 'Technology',
-      publishedYear: 2008,
-      averageRating: 4.6,
-      reviewCount: 234,
-      createdAt: '2024-01-10'
-    },
-    {
-      _id: '3',
-      title: 'The Pragmatic Programmer',
-      author: 'David Thomas, Andrew Hunt',
-      genre: 'Technology',
-      publishedYear: 1999,
-      averageRating: 4.5,
-      reviewCount: 178,
-      createdAt: '2024-01-05'
-    }
-  ];
 
-  const mockUserReviews = [
-    {
-      _id: 'review1',
-      bookId: {
-        _id: '4',
-        title: 'Design Patterns: Elements of Reusable Object-Oriented Software',
-        author: 'Gang of Four'
-      },
-      rating: 5,
-      reviewText: 'An essential read for any software developer. The patterns described here are timeless and applicable across many programming languages. Excellent examples and clear explanations.',
-      createdAt: '2024-01-20'
-    },
-    {
-      _id: 'review2',
-      bookId: {
-        _id: '5',
-        title: 'Refactoring: Improving the Design of Existing Code',
-        author: 'Martin Fowler'
-      },
-      rating: 4,
-      reviewText: 'Great insights into code improvement techniques. The catalog of refactoring patterns is comprehensive and practical for daily development work.',
-      createdAt: '2024-01-18'
-    },
-    {
-      _id: 'review3',
-      bookId: {
-        _id: '6',
-        title: 'System Design Interview',
-        author: 'Alex Xu'
-      },
-      rating: 5,
-      reviewText: 'Excellent preparation material for system design interviews. Clear diagrams and step-by-step approach to complex system architecture problems.',
-      createdAt: '2024-01-16'
-    },
-    {
-      _id: 'review4',
-      bookId: {
-        _id: '7',
-        title: 'JavaScript: The Good Parts',
-        author: 'Douglas Crockford'
-      },
-      rating: 4,
-      reviewText: 'Concise and focused on the essential aspects of JavaScript. Helps understand the language\'s strengths and avoid common pitfalls.',
-      createdAt: '2024-01-12'
-    }
-  ];
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
-  // Redirect if not logged in
   if (!user) {
     navigate('/login');
     return null;
@@ -144,16 +73,25 @@ const Profile = () => {
   }, []);
 
   const fetchUserData = async () => {
-    setLoading(true);
+    setDataLoading(true);
     try {
-      // Simulate API calls with realistic delay
-      await new Promise(resolve => setTimeout(resolve, 1200));
-      setUserBooks(mockUserBooks);
-      setUserReviews(mockUserReviews);
+
+      const booksResponse = await bookAPI.getUserBooks();
+      if (booksResponse.data.success) {
+        setUserBooks(booksResponse.data.data || []);
+      }
+
+
+      const reviewsResponse = await reviewAPI.getUserReviews();
+      if (reviewsResponse.data.success) {
+        setUserReviews(reviewsResponse.data.data || []);
+      }
     } catch (err) {
       console.error('Failed to fetch user data:', err);
+      setUserBooks([]);
+      setUserReviews([]);
     } finally {
-      setLoading(false);
+      setDataLoading(false);
     }
   };
 
@@ -174,9 +112,9 @@ const Profile = () => {
 
   const handleEdit = () => {
     if (deleteType === 'book') {
-      navigate(`/books/${selectedItem._id}/edit`);
+      navigate(`/books/${selectedItem.id}/edit`);
     } else if (deleteType === 'review') {
-      navigate(`/books/${selectedItem.bookId._id}/review?edit=${selectedItem._id}`);
+      navigate(`/books/${selectedItem.book?.id}/review?edit=${selectedItem.id}`);
     }
     handleMenuClose();
   };
@@ -189,9 +127,9 @@ const Profile = () => {
   const handleDeleteConfirm = async () => {
     try {
       if (deleteType === 'book') {
-        setUserBooks(prev => prev.filter(book => book._id !== selectedItem._id));
+        setUserBooks(prev => prev.filter(book => book.id !== selectedItem.id));
       } else if (deleteType === 'review') {
-        setUserReviews(prev => prev.filter(review => review._id !== selectedItem._id));
+        setUserReviews(prev => prev.filter(review => review.id !== selectedItem.id));
       }
     } catch (err) {
       console.error('Failed to delete:', err);
@@ -518,7 +456,7 @@ const Profile = () => {
               </Box>
 
               <Box>
-                {loading ? (
+                {dataLoading ? (
                   renderLoadingSkeleton()
                 ) : (
                   <>
@@ -589,7 +527,7 @@ const Profile = () => {
                           ) : (
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                               {userBooks.map((book, index) => (
-                                <Fade in timeout={400 + index * 100} key={book._id}>
+                                <Fade in timeout={400 + index * 100} key={book.id}>
                                   <Box
                                     sx={{
                                       background: theme.palette.background.paper,
@@ -685,7 +623,7 @@ const Profile = () => {
                                       <Box sx={{ display: 'flex', gap: 1 }}>
                                         <Button
                                           component={Link}
-                                          to={`/books/${book._id}`}
+                                          to={`/books/${book.id}`}
                                           variant="contained"
                                           size="small"
                                           startIcon={<Visibility />}
@@ -820,7 +758,7 @@ const Profile = () => {
                                             mb: 1
                                           }}
                                         >
-                                          {review.bookId.title}
+                                          {review.book?.title || 'Unknown Title'}
                                         </Typography>
                                         <Typography 
                                           variant="body2"
@@ -829,7 +767,7 @@ const Profile = () => {
                                             mb: 2
                                           }}
                                         >
-                                          by {review.bookId.author}
+                                          by {review.book?.author || 'Unknown Author'}
                                         </Typography>
                                         
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
@@ -857,7 +795,7 @@ const Profile = () => {
                                       <Box sx={{ display: 'flex', gap: 1 }}>
                                         <Button
                                           component={Link}
-                                          to={`/books/${review.bookId._id}`}
+                                          to={`/books/${review.book?.id || review.book?._id}`}
                                           variant="contained"
                                           size="small"
                                           startIcon={<Visibility />}
@@ -938,7 +876,7 @@ const Profile = () => {
                     mb: 1
                   }}
                 >
-                  📈 Weekly Reviews
+                  📈 Review Activity
                 </Typography>
                 <Typography 
                   variant="body2"
@@ -947,11 +885,19 @@ const Profile = () => {
                     mb: 4
                   }}
                 >
-                  Your review activity over time
+                  Your review activity over the past 8 weeks
                 </Typography>
                 <Box sx={{ height: 300 }}>
                   <ReviewsChart reviews={userReviews} />
                 </Box>
+                {/* Debug info */}
+                {process.env.NODE_ENV === 'development' && (
+                  <Box sx={{ mt: 2, p: 2, bgcolor: 'background.secondary', borderRadius: 1 }}>
+                    <Typography variant="caption" color="text.secondary">
+                      Debug: {userReviews.length} reviews loaded
+                    </Typography>
+                  </Box>
+                )}
               </Box>
             </Box>
           </Box>

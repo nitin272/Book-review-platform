@@ -1,4 +1,3 @@
-// Pure domain validation functions - no external dependencies
 
 export function validateUserName(name) {
   if (!name || typeof name !== 'string') {
@@ -23,8 +22,6 @@ export function validateUserEmail(email) {
   }
   
   const trimmedEmail = email.trim().toLowerCase();
-  
-  // Simple email regex without external dependencies
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(trimmedEmail)) {
     throw new Error('Please provide a valid email address');

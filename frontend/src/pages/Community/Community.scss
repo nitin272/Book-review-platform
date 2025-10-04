@@ -1,8 +1,6 @@
-// Community Page Styles
+
 .community-page {
-  // Any additional custom styles can go here
-  // Most styling is handled by Material-UI theme system
-  
+
   .community-stats {
     .stat-card {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -39,7 +37,6 @@
   }
 }
 
-// Responsive adjustments
 @media (max-width: 768px) {
   .community-page {
     .community-stats {

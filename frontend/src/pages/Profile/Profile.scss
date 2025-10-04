@@ -7,8 +7,6 @@
     margin: 0 auto;
     padding: 2rem 1rem;
   }
-  
-  // Modern Profile Header
   .profile-header {
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     border-radius: 24px;
@@ -17,8 +15,7 @@
     position: relative;
     overflow: hidden;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    
-    // Subtle background pattern
+
     &::before {
       content: '';
       position: absolute;
@@ -157,8 +154,6 @@
       }
     }
   }
-  
-  // Content Grid Layout (No White Box)
   .content-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -170,7 +165,6 @@
     }
   }
   
-  // Main Content Area
   .main-content {
     .tabs-header {
       margin-bottom: 2rem;
@@ -222,8 +216,7 @@
         color: #64748b;
       }
     }
-    
-    // Enhanced Empty State
+
     .empty-state {
       text-align: center;
       padding: 4rem 2rem;
@@ -270,7 +263,6 @@
       }
     }
     
-    // Enhanced Item Cards
     .items-grid {
       display: flex;
       flex-direction: column;
@@ -431,7 +423,6 @@
     }
   }
   
-  // Sidebar
   .sidebar {
     .chart-section {
       background: white;
@@ -467,8 +458,6 @@
     }
   }
 }
-
-// Enhanced Loading States
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -506,8 +495,6 @@
     }
   }
 }
-
-// Enhanced Loading States
 .loading-container {
   display: flex;
   flex-direction: column;

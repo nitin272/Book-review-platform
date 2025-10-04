@@ -10,7 +10,7 @@ export const findAllBooks = async (page = 1, limit = 5, filters = {}) => {
   const skip = (page - 1) * limit;
   const query = {};
 
-  // Add filters
+
   if (filters.genre) {
     query.genre = new RegExp(filters.genre, 'i');
   }
