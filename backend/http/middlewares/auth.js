@@ -6,6 +6,22 @@ import { asyncHandler } from './errors/asyncHandler.js';
 export const authenticate = asyncHandler(async (req, res, next) => {
   let token = req.cookies.token;
   
+  // Fallback: Check Authorization header if no cookie
+  if (!token) {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.substring(7);
+    }
+  }
+  
+  // Debug logging
+  console.log('=== AUTH MIDDLEWARE DEBUG ===');
+  console.log('Request URL:', req.url);
+  console.log('All cookies:', req.cookies);
+  console.log('Authorization header:', req.headers.authorization);
+  console.log('Token found:', token ? 'YES' : 'NO');
+  console.log('================================');
+  
   if (!token) {
     throw new AuthenticationError('Access denied. Please log in to continue.');
   }
