@@ -4,28 +4,27 @@ import {
   LinearScale,
   PointElement,
   LineElement,
-  BarElement,
   Title,
   Tooltip,
   Legend,
-  ArcElement,
 } from 'chart.js';
-import { Line, Bar, Doughnut } from 'react-chartjs-2';
-import { Box, Typography, Card, CardContent, Grid } from '@mui/material';
+import { Line } from 'react-chartjs-2';
+import { Box, useTheme } from '@mui/material';
+import { useTheme as useCustomTheme } from '../../context/ThemeContext';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
-  BarElement,
   Title,
   Tooltip,
-  Legend,
-  ArcElement
+  Legend
 );
 
-const ReviewsChart = ({ reviews, books }) => {
+const ReviewsChart = ({ reviews }) => {
+  const theme = useTheme();
+  const { isDarkMode } = useCustomTheme();
   // Generate weekly review data for the last 8 weeks
   const generateWeeklyData = () => {
     const weeks = [];
@@ -55,46 +54,7 @@ const ReviewsChart = ({ reviews, books }) => {
     return { weeks, reviewCounts };
   };
 
-  // Generate rating distribution data
-  const generateRatingDistribution = () => {
-    const distribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
-
-    reviews.forEach(review => {
-      distribution[review.rating]++;
-    });
-
-    // Add some mock data for better visualization
-    distribution[5] += Math.floor(Math.random() * 8) + 3;
-    distribution[4] += Math.floor(Math.random() * 6) + 5;
-    distribution[3] += Math.floor(Math.random() * 4) + 2;
-    distribution[2] += Math.floor(Math.random() * 2) + 1;
-    distribution[1] += Math.floor(Math.random() * 2);
-
-    return distribution;
-  };
-
-  // Generate genre distribution from user's books
-  const generateGenreDistribution = () => {
-    const genres = {};
-
-    books.forEach(book => {
-      genres[book.genre] = (genres[book.genre] || 0) + 1;
-    });
-
-    // Add some mock genres for better visualization
-    const mockGenres = ['Mystery', 'Romance', 'Thriller'];
-    mockGenres.forEach(genre => {
-      if (!genres[genre]) {
-        genres[genre] = Math.floor(Math.random() * 2) + 1;
-      }
-    });
-
-    return genres;
-  };
-
   const { weeks, reviewCounts } = generateWeeklyData();
-  const ratingDistribution = generateRatingDistribution();
-  const genreDistribution = generateGenreDistribution();
 
   // Weekly Reviews Line Chart
   const weeklyReviewsData = {
@@ -103,63 +63,16 @@ const ReviewsChart = ({ reviews, books }) => {
       {
         label: 'Reviews Written',
         data: reviewCounts,
-        borderColor: '#3b82f6',
-        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        borderColor: isDarkMode ? '#60a5fa' : '#3b82f6', // Blue color that works well in both themes
+        backgroundColor: isDarkMode ? 'rgba(96, 165, 250, 0.1)' : 'rgba(59, 130, 246, 0.1)',
         borderWidth: 3,
         fill: true,
         tension: 0.4,
-        pointBackgroundColor: '#3b82f6',
-        pointBorderColor: '#ffffff',
+        pointBackgroundColor: isDarkMode ? '#60a5fa' : '#3b82f6',
+        pointBorderColor: theme.palette.background.paper,
         pointBorderWidth: 2,
         pointRadius: 5,
         pointHoverRadius: 7,
-      },
-    ],
-  };
-
-  // Rating Distribution Bar Chart
-  const ratingDistributionData = {
-    labels: ['5 Stars', '4 Stars', '3 Stars', '2 Stars', '1 Star'],
-    datasets: [
-      {
-        label: 'Number of Reviews',
-        data: [
-          ratingDistribution[5],
-          ratingDistribution[4],
-          ratingDistribution[3],
-          ratingDistribution[2],
-          ratingDistribution[1],
-        ],
-        backgroundColor: [
-          '#10b981',
-          '#3b82f6',
-          '#f59e0b',
-          '#ef4444',
-          '#6b7280',
-        ],
-        borderRadius: 6,
-        borderSkipped: false,
-      },
-    ],
-  };
-
-  // Genre Distribution Doughnut Chart
-  const genreDistributionData = {
-    labels: Object.keys(genreDistribution),
-    datasets: [
-      {
-        data: Object.values(genreDistribution),
-        backgroundColor: [
-          '#3b82f6',
-          '#10b981',
-          '#f59e0b',
-          '#ef4444',
-          '#8b5cf6',
-          '#06b6d4',
-        ],
-        borderWidth: 0,
-        hoverBorderWidth: 2,
-        hoverBorderColor: '#ffffff',
       },
     ],
   };
@@ -169,19 +82,13 @@ const ReviewsChart = ({ reviews, books }) => {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        labels: {
-          color: '#374151',
-          font: {
-            size: 12,
-            weight: '500',
-          },
-        },
+        display: false,
       },
       tooltip: {
-        backgroundColor: '#ffffff',
-        titleColor: '#374151',
-        bodyColor: '#374151',
-        borderColor: '#e5e7eb',
+        backgroundColor: theme.palette.background.paper,
+        titleColor: theme.palette.text.primary,
+        bodyColor: theme.palette.text.primary,
+        borderColor: theme.palette.border.main,
         borderWidth: 1,
         cornerRadius: 8,
         padding: 12,
@@ -190,25 +97,25 @@ const ReviewsChart = ({ reviews, books }) => {
     scales: {
       x: {
         grid: {
-          color: '#f3f4f6',
+          color: theme.palette.border.light,
           drawBorder: false,
         },
         ticks: {
-          color: '#6b7280',
+          color: theme.palette.text.secondary,
           font: {
-            size: 11,
+            size: 10,
           },
         },
       },
       y: {
         grid: {
-          color: '#f3f4f6',
+          color: theme.palette.border.light,
           drawBorder: false,
         },
         ticks: {
-          color: '#6b7280',
+          color: theme.palette.text.secondary,
           font: {
-            size: 11,
+            size: 10,
           },
         },
         beginAtZero: true,
@@ -216,106 +123,13 @@ const ReviewsChart = ({ reviews, books }) => {
     },
   };
 
-  const doughnutOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'bottom',
-        labels: {
-          color: '#374151',
-          font: {
-            size: 12,
-            weight: '500',
-          },
-          padding: 15,
-          usePointStyle: true,
-          pointStyle: 'circle',
-        },
-      },
-      tooltip: {
-        backgroundColor: '#ffffff',
-        titleColor: '#374151',
-        bodyColor: '#374151',
-        borderColor: '#e5e7eb',
-        borderWidth: 1,
-        cornerRadius: 8,
-        padding: 12,
-      },
-    },
-    cutout: '60%',
-  };
-
   return (
-    <Box sx={{ mt: 3 }}>
-      <Typography variant="h5" fontWeight={700} sx={{ mb: 3, color: '#1a1a1a' }}>
-        📊 Your Reading Analytics
-      </Typography>
-
-      <Grid container spacing={3}>
-        {/* Weekly Reviews Chart */}
-        <Grid item xs={12} lg={8}>
-          <Card sx={{
-            borderRadius: 3,
-            border: '1px solid #e2e8f0',
-            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
-          }}>
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" fontWeight={600} sx={{ mb: 2, color: '#1a1a1a' }}>
-                📈 Weekly Review Activity
-              </Typography>
-              <Typography variant="body2" color="#64748b" sx={{ mb: 3 }}>
-                Your review activity over the last 8 weeks
-              </Typography>
-              <Box sx={{ height: 300 }}>
-                <Line data={weeklyReviewsData} options={chartOptions} />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Genre Distribution */}
-        <Grid item xs={12} lg={4}>
-          <Card sx={{
-            borderRadius: 3,
-            border: '1px solid #e2e8f0',
-            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
-          }}>
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" fontWeight={600} sx={{ mb: 2, color: '#1a1a1a' }}>
-                📚 Books by Genre
-              </Typography>
-              <Typography variant="body2" color="#64748b" sx={{ mb: 3 }}>
-                Distribution of your book collection
-              </Typography>
-              <Box sx={{ height: 300 }}>
-                <Doughnut data={genreDistributionData} options={doughnutOptions} />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Rating Distribution */}
-        <Grid item xs={12}>
-          <Card sx={{
-            borderRadius: 3,
-            border: '1px solid #e2e8f0',
-            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
-          }}>
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" fontWeight={600} sx={{ mb: 2, color: '#1a1a1a' }}>
-                ⭐ Your Rating Distribution
-              </Typography>
-              <Typography variant="body2" color="#64748b" sx={{ mb: 3 }}>
-                How you rate the books you review
-              </Typography>
-              <Box sx={{ height: 300 }}>
-                <Bar data={ratingDistributionData} options={chartOptions} />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+    <Box sx={{ height: '100%' }}>
+      <Line 
+        key={isDarkMode ? 'dark' : 'light'} // Force re-render when theme changes
+        data={weeklyReviewsData} 
+        options={chartOptions} 
+      />
     </Box>
   );
 };

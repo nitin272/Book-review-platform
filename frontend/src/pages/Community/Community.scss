@@ -1,0 +1,51 @@
+// Community Page Styles
+.community-page {
+  // Any additional custom styles can go here
+  // Most styling is handled by Material-UI theme system
+  
+  .community-stats {
+    .stat-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      &:hover {
+        transform: translateY(-4px);
+      }
+    }
+  }
+  
+  .discussion-thread {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+  
+  .book-club-card {
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+  
+  .challenge-card {
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .community-page {
+    .community-stats {
+      .stat-card {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}

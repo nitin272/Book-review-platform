@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { useTheme as useCustomTheme } from '../../context/ThemeContext';
 import {
     Box,
     Container,
@@ -22,11 +23,12 @@ import {
 const HeroSection = () => {
     const { user } = useContext(AuthContext);
     const theme = useTheme();
+    const { isDarkMode } = useCustomTheme();
 
     return (
         <Box
             sx={{
-                background: '#fafafa',
+                background: theme.palette.background.secondary,
                 minHeight: { xs: '85vh', md: '90vh' },
                 display: 'flex',
                 alignItems: 'center',
@@ -56,7 +58,7 @@ const HeroSection = () => {
                                     fontWeight: 800,
                                     mb: 3,
                                     lineHeight: 1.1,
-                                    color: '#1a1a1a'
+                                    color: theme.palette.text.primary
                                 }}
                             >
                                 Discover Your Next{' '}
@@ -75,7 +77,7 @@ const HeroSection = () => {
                                 variant="h6"
                                 sx={{
                                     mb: 4,
-                                    color: '#6b7280',
+                                    color: theme.palette.text.secondary,
                                     lineHeight: 1.6,
                                     fontSize: { xs: '1.1rem', md: '1.25rem' },
                                     fontWeight: 400
@@ -99,12 +101,13 @@ const HeroSection = () => {
                                         fontWeight: 600,
                                         textTransform: 'none',
                                         borderRadius: 2,
-                                        backgroundColor: '#1f2937',
-                                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                                        backgroundColor: isDarkMode ? '#ffffff' : '#1f2937',
+                                        color: isDarkMode ? '#000000' : '#ffffff',
+                                        boxShadow: isDarkMode ? '0 4px 6px -1px rgba(0, 0, 0, 0.3)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
                                         '&:hover': {
-                                            backgroundColor: '#111827',
+                                            backgroundColor: isDarkMode ? '#f3f4f6' : '#111827',
                                             transform: 'translateY(-1px)',
-                                            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+                                            boxShadow: isDarkMode ? '0 10px 15px -3px rgba(0, 0, 0, 0.3)' : '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
                                         }
                                     }}
                                 >
@@ -123,11 +126,11 @@ const HeroSection = () => {
                                         fontWeight: 600,
                                         textTransform: 'none',
                                         borderRadius: 2,
-                                        borderColor: '#e5e7eb',
-                                        color: '#374151',
+                                        borderColor: theme.palette.border.main,
+                                        color: theme.palette.text.secondary,
                                         '&:hover': {
-                                            borderColor: '#d1d5db',
-                                            backgroundColor: '#f9fafb'
+                                            borderColor: theme.palette.border.dark,
+                                            backgroundColor: theme.palette.background.secondary
                                         }
                                     }}
                                 >
@@ -141,10 +144,10 @@ const HeroSection = () => {
                                     label="Free Forever"
                                     variant="outlined"
                                     sx={{
-                                        borderColor: '#e5e7eb',
-                                        color: '#6b7280',
+                                        borderColor: theme.palette.border.main,
+                                        color: theme.palette.text.secondary,
                                         fontWeight: 500,
-                                        '& .MuiChip-icon': { color: '#6b7280' }
+                                        '& .MuiChip-icon': { color: theme.palette.text.secondary }
                                     }}
                                 />
                                 <Chip
@@ -152,10 +155,10 @@ const HeroSection = () => {
                                     label="10K+ Readers"
                                     variant="outlined"
                                     sx={{
-                                        borderColor: '#e5e7eb',
-                                        color: '#6b7280',
+                                        borderColor: theme.palette.border.main,
+                                        color: theme.palette.text.secondary,
                                         fontWeight: 500,
-                                        '& .MuiChip-icon': { color: '#6b7280' }
+                                        '& .MuiChip-icon': { color: theme.palette.text.secondary }
                                     }}
                                 />
                                 <Chip
@@ -163,10 +166,10 @@ const HeroSection = () => {
                                     label="Active Community"
                                     variant="outlined"
                                     sx={{
-                                        borderColor: '#e5e7eb',
-                                        color: '#6b7280',
+                                        borderColor: theme.palette.border.main,
+                                        color: theme.palette.text.secondary,
                                         fontWeight: 500,
-                                        '& .MuiChip-icon': { color: '#6b7280' }
+                                        '& .MuiChip-icon': { color: theme.palette.text.secondary }
                                     }}
                                 />
                             </Stack>
@@ -188,13 +191,13 @@ const HeroSection = () => {
                                 sx={{
                                     width: { xs: 300, md: 400 },
                                     height: { xs: 300, md: 400 },
-                                    background: 'white',
+                                    background: theme.palette.background.paper,
                                     borderRadius: 3,
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                                    border: '1px solid #e5e7eb',
+                                    boxShadow: isDarkMode ? '0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2)' : '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                                    border: `1px solid ${theme.palette.border.main}`,
                                     position: 'relative',
                                     overflow: 'hidden'
                                 }}
