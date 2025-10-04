@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { useTheme as useCustomTheme } from '../../context/ThemeContext';
 import {
   AppBar,
   Toolbar,
@@ -16,8 +17,8 @@ import {
   useTheme,
   useMediaQuery,
   Divider,
-  Badge,
-  Fade
+  Fade,
+  Tooltip
 } from '@mui/material';
 import {
   MenuBook,
@@ -26,14 +27,16 @@ import {
   Logout,
   AccountCircle,
   Settings,
-  Notifications,
   Search,
   KeyboardArrowDown,
-  Close
+  Close,
+  LightMode,
+  DarkMode
 } from '@mui/icons-material';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
+  const { isDarkMode, toggleTheme } = useCustomTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const theme = useTheme();
@@ -69,14 +72,19 @@ const Navbar = () => {
   ];
 
   const drawer = (
-    <Box sx={{ width: 320, height: '100%', background: 'white' }}>
+    <Box sx={{ 
+      width: 320, 
+      height: '100%', 
+      background: theme.palette.background.default,
+      color: theme.palette.text.primary
+    }}>
       {/* Mobile Header */}
       <Box sx={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         p: 3,
-        borderBottom: '1px solid #f3f4f6'
+        borderBottom: `1px solid ${theme.palette.border.light}`
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Box sx={{
@@ -90,11 +98,11 @@ const Navbar = () => {
           }}>
             <MenuBook sx={{ color: 'white', fontSize: 18 }} />
           </Box>
-          <Typography variant="h6" fontWeight={700} color="#1a1a1a">
+          <Typography variant="h6" fontWeight={700} color={theme.palette.text.primary}>
             Readly
           </Typography>
         </Box>
-        <IconButton onClick={handleDrawerToggle} sx={{ color: '#6b7280' }}>
+        <IconButton onClick={handleDrawerToggle} sx={{ color: theme.palette.text.secondary }}>
           <Close />
         </IconButton>
       </Box>
@@ -113,11 +121,11 @@ const Navbar = () => {
               borderRadius: 2,
               mb: 1,
               textDecoration: 'none',
-              color: isActive(item.path) ? '#1a1a1a' : '#6b7280',
-              backgroundColor: isActive(item.path) ? '#f3f4f6' : 'transparent',
+              color: isActive(item.path) ? theme.palette.text.primary : theme.palette.text.secondary,
+              backgroundColor: isActive(item.path) ? theme.palette.background.tertiary : 'transparent',
               '&:hover': {
-                backgroundColor: '#f9fafb',
-                color: '#1a1a1a'
+                backgroundColor: theme.palette.background.secondary,
+                color: theme.palette.text.primary
               }
             }}
           >
@@ -149,10 +157,10 @@ const Navbar = () => {
                 borderRadius: 2,
                 mb: 1,
                 textDecoration: 'none',
-                color: '#6b7280',
+                color: theme.palette.text.secondary,
                 '&:hover': {
-                  backgroundColor: '#f9fafb',
-                  color: '#1a1a1a'
+                  backgroundColor: theme.palette.background.secondary,
+                  color: theme.palette.text.primary
                 }
               }}
             >
@@ -173,16 +181,39 @@ const Navbar = () => {
                 borderRadius: 2,
                 mb: 1,
                 textDecoration: 'none',
-                color: '#6b7280',
+                color: theme.palette.text.secondary,
                 '&:hover': {
-                  backgroundColor: '#f9fafb',
-                  color: '#1a1a1a'
+                  backgroundColor: theme.palette.background.secondary,
+                  color: theme.palette.text.primary
                 }
               }}
             >
               <AccountCircle sx={{ fontSize: 20 }} />
               <Typography variant="body1" fontWeight={500}>
                 Profile
+              </Typography>
+            </Box>
+            {/* Theme Toggle */}
+            <Box
+              onClick={toggleTheme}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2,
+                p: 2,
+                borderRadius: 2,
+                mb: 1,
+                cursor: 'pointer',
+                color: theme.palette.text.secondary,
+                '&:hover': {
+                  backgroundColor: theme.palette.background.secondary,
+                  color: theme.palette.text.primary
+                }
+              }}
+            >
+              {isDarkMode ? <LightMode sx={{ fontSize: 20 }} /> : <DarkMode sx={{ fontSize: 20 }} />}
+              <Typography variant="body1" fontWeight={500}>
+                {isDarkMode ? 'Light Mode' : 'Dark Mode'}
               </Typography>
             </Box>
             <Box
@@ -194,10 +225,10 @@ const Navbar = () => {
                 p: 2,
                 borderRadius: 2,
                 cursor: 'pointer',
-                color: '#6b7280',
+                color: theme.palette.text.secondary,
                 '&:hover': {
-                  backgroundColor: '#f9fafb',
-                  color: '#1a1a1a'
+                  backgroundColor: theme.palette.background.secondary,
+                  color: theme.palette.text.primary
                 }
               }}
             >
@@ -262,10 +293,10 @@ const Navbar = () => {
         position="sticky"
         elevation={0}
         sx={{
-          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          backgroundColor: theme.palette.navbar.background,
           backdropFilter: 'blur(20px)',
-          borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
-          color: '#1a1a1a',
+          borderBottom: `1px solid ${theme.palette.navbar.border}`,
+          color: theme.palette.text.primary,
           zIndex: 1100
         }}
       >
@@ -299,7 +330,7 @@ const Navbar = () => {
               <Typography
                 variant="h5"
                 fontWeight={800}
-                sx={{ color: '#1a1a1a', fontSize: '1.4rem' }}
+                sx={{ color: theme.palette.text.primary, fontSize: '1.4rem' }}
               >
                 Readly
               </Typography>
@@ -314,7 +345,7 @@ const Navbar = () => {
                     component={Link}
                     to={item.path}
                     sx={{
-                      color: isActive(item.path) ? '#1a1a1a' : '#6b7280',
+                      color: isActive(item.path) ? theme.palette.text.primary : theme.palette.text.secondary,
                       fontWeight: isActive(item.path) ? 700 : 600,
                       textTransform: 'none',
                       px: 4,
@@ -324,8 +355,8 @@ const Navbar = () => {
                       position: 'relative',
                       minHeight: 44,
                       '&:hover': {
-                        backgroundColor: 'rgba(0, 0, 0, 0.06)',
-                        color: '#1a1a1a',
+                        backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
+                        color: theme.palette.text.primary,
                         transform: 'translateY(-1px)'
                       },
                       '&::after': isActive(item.path) ? {
@@ -336,7 +367,7 @@ const Navbar = () => {
                         transform: 'translateX(-50%)',
                         width: '24px',
                         height: '3px',
-                        backgroundColor: '#1a1a1a',
+                        backgroundColor: theme.palette.text.primary,
                         borderRadius: '2px'
                       } : {}
                     }}
@@ -354,24 +385,24 @@ const Navbar = () => {
               <Box sx={{
                 display: 'flex',
                 alignItems: 'center',
-                backgroundColor: '#f9fafb',
+                backgroundColor: theme.palette.background.secondary,
                 borderRadius: 3,
                 px: 3,
                 py: 1.5,
                 mr: 4,
                 minWidth: 280,
-                border: '1px solid #e5e7eb',
+                border: `1px solid ${theme.palette.border.main}`,
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
                 '&:hover': {
-                  borderColor: '#d1d5db',
-                  backgroundColor: '#f3f4f6',
+                  borderColor: theme.palette.border.dark,
+                  backgroundColor: theme.palette.background.tertiary,
                   transform: 'translateY(-1px)',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                  boxShadow: isDarkMode ? '0 4px 6px -1px rgba(0, 0, 0, 0.3)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                 }
               }}>
-                <Search sx={{ color: '#9ca3af', fontSize: 22, mr: 2 }} />
-                <Typography variant="body1" sx={{ color: '#9ca3af', fontWeight: 500 }}>
+                <Search sx={{ color: theme.palette.text.tertiary, fontSize: 22, mr: 2 }} />
+                <Typography variant="body1" sx={{ color: theme.palette.text.tertiary, fontWeight: 500 }}>
                   Search books...
                 </Typography>
               </Box>
@@ -382,28 +413,24 @@ const Navbar = () => {
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                 {user ? (
                   <>
-                    {/* Notifications */}
-                    <IconButton sx={{
-                      color: '#6b7280',
-                      width: 48,
-                      height: 48,
-                      borderRadius: 3,
-                      '&:hover': { 
-                        backgroundColor: 'rgba(0, 0, 0, 0.06)',
-                        transform: 'translateY(-1px)'
-                      }
-                    }}>
-                      <Badge badgeContent={3} color="error" sx={{
-                        '& .MuiBadge-badge': {
-                          fontSize: '0.75rem',
-                          height: 18,
-                          minWidth: 18,
-                          fontWeight: 600
-                        }
-                      }}>
-                        <Notifications sx={{ fontSize: 24 }} />
-                      </Badge>
-                    </IconButton>
+                    {/* Theme Toggle */}
+                    <Tooltip title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}>
+                      <IconButton 
+                        onClick={toggleTheme}
+                        sx={{
+                          color: theme.palette.text.secondary,
+                          width: 48,
+                          height: 48,
+                          borderRadius: 3,
+                          '&:hover': { 
+                            backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
+                            transform: 'translateY(-1px)'
+                          }
+                        }}
+                      >
+                        {isDarkMode ? <LightMode sx={{ fontSize: 24 }} /> : <DarkMode sx={{ fontSize: 24 }} />}
+                      </IconButton>
+                    </Tooltip>
 
                     {/* Add Book Button */}
                     <Button
@@ -417,15 +444,15 @@ const Navbar = () => {
                         fontWeight: 600,
                         px: 4,
                         py: 1.5,
-                        borderColor: '#e5e7eb',
-                        color: '#374151',
+                        borderColor: theme.palette.border.main,
+                        color: theme.palette.text.secondary,
                         fontSize: '1rem',
                         minHeight: 48,
                         '&:hover': {
-                          borderColor: '#d1d5db',
-                          backgroundColor: '#f9fafb',
+                          borderColor: theme.palette.border.dark,
+                          backgroundColor: theme.palette.background.secondary,
                           transform: 'translateY(-1px)',
-                          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                          boxShadow: isDarkMode ? '0 4px 6px -1px rgba(0, 0, 0, 0.3)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                         }
                       }}
                     >
@@ -440,11 +467,11 @@ const Navbar = () => {
                         borderRadius: 3,
                         px: 3,
                         py: 1.5,
-                        color: '#374151',
+                        color: theme.palette.text.secondary,
                         minWidth: 'auto',
                         minHeight: 48,
                         '&:hover': {
-                          backgroundColor: 'rgba(0, 0, 0, 0.06)',
+                          backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
                           transform: 'translateY(-1px)'
                         }
                       }}
@@ -463,10 +490,10 @@ const Navbar = () => {
                         {user.name?.charAt(0).toUpperCase()}
                       </Avatar>
                       <Box sx={{ textAlign: 'left' }}>
-                        <Typography variant="body1" fontWeight={700} sx={{ lineHeight: 1.2 }}>
+                        <Typography variant="body1" fontWeight={700} sx={{ lineHeight: 1.2, color: theme.palette.text.primary }}>
                           {user.name?.split(' ')[0]}
                         </Typography>
-                        <Typography variant="body2" sx={{ color: '#9ca3af', lineHeight: 1 }}>
+                        <Typography variant="body2" sx={{ color: theme.palette.text.tertiary, lineHeight: 1 }}>
                           {user.email?.length > 18 ? `${user.email.substring(0, 18)}...` : user.email}
                         </Typography>
                       </Box>
@@ -474,12 +501,31 @@ const Navbar = () => {
                   </>
                 ) : (
                   <>
+                    {/* Theme Toggle for non-authenticated users */}
+                    <Tooltip title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}>
+                      <IconButton 
+                        onClick={toggleTheme}
+                        sx={{
+                          color: theme.palette.text.secondary,
+                          width: 48,
+                          height: 48,
+                          borderRadius: 3,
+                          mr: 2,
+                          '&:hover': { 
+                            backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
+                            transform: 'translateY(-1px)'
+                          }
+                        }}
+                      >
+                        {isDarkMode ? <LightMode sx={{ fontSize: 24 }} /> : <DarkMode sx={{ fontSize: 24 }} />}
+                      </IconButton>
+                    </Tooltip>
                     <Button
                       component={Link}
                       to="/login"
                       sx={{
                         textTransform: 'none',
-                        color: '#6b7280',
+                        color: theme.palette.text.secondary,
                         fontWeight: 600,
                         px: 4,
                         py: 1.5,
@@ -487,8 +533,8 @@ const Navbar = () => {
                         fontSize: '1rem',
                         minHeight: 48,
                         '&:hover': {
-                          backgroundColor: 'rgba(0, 0, 0, 0.06)',
-                          color: '#1a1a1a',
+                          backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
+                          color: theme.palette.text.primary,
                           transform: 'translateY(-1px)'
                         }
                       }}
@@ -507,11 +553,12 @@ const Navbar = () => {
                         fontWeight: 700,
                         fontSize: '1rem',
                         minHeight: 48,
-                        backgroundColor: '#1f2937',
-                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                        backgroundColor: isDarkMode ? '#ffffff' : '#1f2937',
+                        color: isDarkMode ? '#000000' : '#ffffff',
+                        boxShadow: isDarkMode ? '0 4px 6px -1px rgba(0, 0, 0, 0.3)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
                         '&:hover': {
-                          backgroundColor: '#111827',
-                          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                          backgroundColor: isDarkMode ? '#f3f4f6' : '#111827',
+                          boxShadow: isDarkMode ? '0 10px 15px -3px rgba(0, 0, 0, 0.3)' : '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
                           transform: 'translateY(-2px)'
                         }
                       }}
@@ -525,21 +572,41 @@ const Navbar = () => {
 
             {/* Mobile Menu Button */}
             {isMobile && (
-              <IconButton
-                onClick={handleDrawerToggle}
-                sx={{
-                  color: '#6b7280',
-                  width: 48,
-                  height: 48,
-                  borderRadius: 3,
-                  '&:hover': { 
-                    backgroundColor: 'rgba(0, 0, 0, 0.06)',
-                    transform: 'translateY(-1px)'
-                  }
-                }}
-              >
-                <MenuIcon sx={{ fontSize: 24 }} />
-              </IconButton>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                {/* Theme Toggle for Mobile */}
+                <Tooltip title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}>
+                  <IconButton 
+                    onClick={toggleTheme}
+                    sx={{
+                      color: theme.palette.text.secondary,
+                      width: 48,
+                      height: 48,
+                      borderRadius: 3,
+                      '&:hover': { 
+                        backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
+                        transform: 'translateY(-1px)'
+                      }
+                    }}
+                  >
+                    {isDarkMode ? <LightMode sx={{ fontSize: 24 }} /> : <DarkMode sx={{ fontSize: 24 }} />}
+                  </IconButton>
+                </Tooltip>
+                <IconButton
+                  onClick={handleDrawerToggle}
+                  sx={{
+                    color: theme.palette.text.secondary,
+                    width: 48,
+                    height: 48,
+                    borderRadius: 3,
+                    '&:hover': { 
+                      backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
+                      transform: 'translateY(-1px)'
+                    }
+                  }}
+                >
+                  <MenuIcon sx={{ fontSize: 24 }} />
+                </IconButton>
+              </Box>
             )}
           </Toolbar>
         </Container>
@@ -556,8 +623,9 @@ const Navbar = () => {
               mt: 1.5,
               borderRadius: 3,
               minWidth: 280,
-              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-              border: '1px solid #e5e7eb',
+              backgroundColor: theme.palette.background.paper,
+              boxShadow: isDarkMode ? '0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2)' : '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+              border: `1px solid ${theme.palette.border.main}`,
               py: 1
             }
           }
@@ -566,11 +634,12 @@ const Navbar = () => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         {/* User Info Header */}
-        <Box sx={{ px: 4, py: 3, borderBottom: '1px solid #f3f4f6' }}>
+        <Box sx={{ px: 4, py: 3, borderBottom: `1px solid ${theme.palette.border.light}` }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
             <Avatar
               sx={{
-                bgcolor: '#1f2937',
+                bgcolor: isDarkMode ? '#ffffff' : '#1f2937',
+                color: isDarkMode ? '#000000' : '#ffffff',
                 width: 48,
                 height: 48,
                 fontSize: '1.2rem',
@@ -580,10 +649,10 @@ const Navbar = () => {
               {user?.name?.charAt(0).toUpperCase()}
             </Avatar>
             <Box>
-              <Typography variant="h6" fontWeight={700} sx={{ color: '#1a1a1a' }}>
+              <Typography variant="h6" fontWeight={700} sx={{ color: theme.palette.text.primary }}>
                 {user?.name}
               </Typography>
-              <Typography variant="body1" sx={{ color: '#6b7280' }}>
+              <Typography variant="body1" sx={{ color: theme.palette.text.secondary }}>
                 {user?.email}
               </Typography>
             </Box>
@@ -600,13 +669,13 @@ const Navbar = () => {
             py: 2.5,
             gap: 3,
             minHeight: 64,
-            '&:hover': { backgroundColor: '#f9fafb' }
+            '&:hover': { backgroundColor: theme.palette.background.secondary }
           }}
         >
-          <AccountCircle sx={{ fontSize: 24, color: '#6b7280' }} />
+          <AccountCircle sx={{ fontSize: 24, color: theme.palette.text.secondary }} />
           <Box>
-            <Typography variant="body1" fontWeight={600}>Profile</Typography>
-            <Typography variant="body2" sx={{ color: '#9ca3af' }}>
+            <Typography variant="body1" fontWeight={600} sx={{ color: theme.palette.text.primary }}>Profile</Typography>
+            <Typography variant="body2" sx={{ color: theme.palette.text.tertiary }}>
               Manage your account
             </Typography>
           </Box>
@@ -621,13 +690,13 @@ const Navbar = () => {
             py: 2.5,
             gap: 3,
             minHeight: 64,
-            '&:hover': { backgroundColor: '#f9fafb' }
+            '&:hover': { backgroundColor: theme.palette.background.secondary }
           }}
         >
-          <Settings sx={{ fontSize: 24, color: '#6b7280' }} />
+          <Settings sx={{ fontSize: 24, color: theme.palette.text.secondary }} />
           <Box>
-            <Typography variant="body1" fontWeight={600}>Settings</Typography>
-            <Typography variant="body2" sx={{ color: '#9ca3af' }}>
+            <Typography variant="body1" fontWeight={600} sx={{ color: theme.palette.text.primary }}>Settings</Typography>
+            <Typography variant="body2" sx={{ color: theme.palette.text.tertiary }}>
               Preferences & privacy
             </Typography>
           </Box>
@@ -642,7 +711,7 @@ const Navbar = () => {
             py: 2.5,
             gap: 3,
             minHeight: 64,
-            '&:hover': { backgroundColor: '#fef2f2' }
+            '&:hover': { backgroundColor: isDarkMode ? 'rgba(239, 68, 68, 0.1)' : '#fef2f2' }
           }}
         >
           <Logout sx={{ fontSize: 24, color: '#ef4444' }} />
@@ -650,7 +719,7 @@ const Navbar = () => {
             <Typography variant="body1" fontWeight={600} sx={{ color: '#ef4444' }}>
               Sign Out
             </Typography>
-            <Typography variant="body2" sx={{ color: '#9ca3af' }}>
+            <Typography variant="body2" sx={{ color: theme.palette.text.tertiary }}>
               Sign out of your account
             </Typography>
           </Box>

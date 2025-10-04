@@ -1,3 +1,6 @@
+import { useTheme } from '@mui/material/styles';
+import { Box } from '@mui/material';
+import { useTheme as useCustomTheme } from '../../context/ThemeContext';
 import HeroSection from '../../components/Home/HeroSection';
 import StatsSection from '../../components/Home/StatsSection';
 import FeaturesSection from '../../components/Home/FeaturesSection';
@@ -6,14 +9,24 @@ import CTASection from '../../components/Home/CTASection';
 import './Home.scss';
 
 const Home = () => {
+  const theme = useTheme();
+  const { isDarkMode } = useCustomTheme();
+
   return (
-    <div className="home-page">
+    <Box
+      className="home-page"
+      sx={{
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary,
+        minHeight: '100vh'
+      }}
+    >
       <HeroSection />
       <StatsSection />
       <FeaturesSection />
       <TestimonialsSection />
       <CTASection />
-    </div>
+    </Box>
   );
 };
 

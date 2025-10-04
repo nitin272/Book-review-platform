@@ -1,6 +1,8 @@
 import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { useTheme } from '@mui/material/styles';
+import { useTheme as useCustomTheme } from '../../context/ThemeContext';
 import {
   Container,
   Box,
@@ -23,7 +25,6 @@ import {
   NavigateNext,
   MenuBook
 } from '@mui/icons-material';
-import './Review.scss';
 
 const Review = () => {
   const { id } = useParams(); // book id
@@ -31,6 +32,8 @@ const Review = () => {
   const editReviewId = searchParams.get('edit');
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const { isDarkMode } = useCustomTheme();
 
   // State management
   const [book, setBook] = useState(null);
@@ -178,7 +181,13 @@ const Review = () => {
 
   if (fetchLoading) {
     return (
-      <Container maxWidth="md" sx={{ py: 4 }}>
+      <Box 
+        sx={{
+          backgroundColor: theme.palette.background.default,
+          minHeight: '100vh'
+        }}
+      >
+        <Container maxWidth="md" sx={{ py: 4 }}>
         {/* Breadcrumbs skeleton */}
         <Skeleton variant="text" width="30%" height={20} sx={{ mb: 3 }} />
         
@@ -236,21 +245,29 @@ const Review = () => {
           </CardContent>
         </Card>
       </Container>
+      </Box>
     );
   }
 
   return (
-    <div className="review-page">
+    <Box 
+      className="review-page"
+      sx={{
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary,
+        minHeight: '100vh'
+      }}
+    >
       <Container maxWidth="md" sx={{ py: 4 }}>
         {/* Breadcrumbs */}
         <Breadcrumbs
           separator={<NavigateNext fontSize="small" />}
           sx={{ mb: 3 }}
         >
-          <Link to="/books" style={{ textDecoration: 'none', color: '#6b7280' }}>
+          <Link to="/books" style={{ textDecoration: 'none', color: theme.palette.text.secondary }}>
             Books
           </Link>
-          <Link to={`/books/${id}`} style={{ textDecoration: 'none', color: '#6b7280' }}>
+          <Link to={`/books/${id}`} style={{ textDecoration: 'none', color: theme.palette.text.secondary }}>
             {book?.title || 'Book Details'}
           </Link>
           <Typography color="text.primary" fontWeight={600}>
@@ -266,9 +283,9 @@ const Review = () => {
             sx={{
               textTransform: 'none',
               fontWeight: 600,
-              color: '#6b7280',
+              color: theme.palette.text.secondary,
               '&:hover': {
-                backgroundColor: '#f9fafb'
+                backgroundColor: theme.palette.background.secondary
               }
             }}
           >
@@ -441,11 +458,11 @@ const Review = () => {
                     fontWeight: 600,
                     px: 4,
                     py: 1.5,
-                    borderColor: '#e5e7eb',
-                    color: '#6b7280',
+                    borderColor: theme.palette.border.main,
+                    color: theme.palette.text.secondary,
                     '&:hover': {
-                      borderColor: '#d1d5db',
-                      backgroundColor: '#f9fafb'
+                      borderColor: theme.palette.border.dark,
+                      backgroundColor: theme.palette.background.secondary
                     }
                   }}
                 >
@@ -463,12 +480,14 @@ const Review = () => {
                     fontWeight: 600,
                     px: 4,
                     py: 1.5,
-                    backgroundColor: '#1f2937',
+                    backgroundColor: isDarkMode ? '#ffffff' : '#1f2937',
+                    color: isDarkMode ? '#000000' : '#ffffff',
                     '&:hover': {
-                      backgroundColor: '#111827'
+                      backgroundColor: isDarkMode ? '#f3f4f6' : '#111827'
                     },
                     '&:disabled': {
-                      backgroundColor: '#9ca3af'
+                      backgroundColor: theme.palette.action.disabledBackground,
+                      color: theme.palette.action.disabled
                     }
                   }}
                 >
@@ -480,11 +499,27 @@ const Review = () => {
         </Card>
 
         {/* Guidelines */}
-        <Box sx={{ mt: 4, p: 3, backgroundColor: '#f9fafb', borderRadius: 2 }}>
-          <Typography variant="h6" fontWeight={600} gutterBottom>
+        <Box sx={{ 
+          mt: 4, 
+          p: 3, 
+          backgroundColor: theme.palette.background.secondary, 
+          borderRadius: 2,
+          border: `1px solid ${theme.palette.border.light}`
+        }}>
+          <Typography 
+            variant="h6" 
+            fontWeight={600} 
+            gutterBottom
+            sx={{ color: theme.palette.text.primary }}
+          >
             Review Guidelines:
           </Typography>
-          <Typography variant="body2" color="text.secondary" component="ul" sx={{ pl: 2 }}>
+          <Typography 
+            variant="body2" 
+            color={theme.palette.text.secondary} 
+            component="ul" 
+            sx={{ pl: 2 }}
+          >
             <li>Be honest and constructive in your feedback</li>
             <li>Focus on the book's content, not personal attacks on the author</li>
             <li>Avoid major spoilers - use spoiler warnings if necessary</li>
@@ -493,7 +528,7 @@ const Review = () => {
           </Typography>
         </Box>
       </Container>
-    </div>
+    </Box>
   );
 };
 

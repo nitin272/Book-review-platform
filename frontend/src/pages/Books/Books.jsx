@@ -1,6 +1,8 @@
 import { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { useTheme } from '@mui/material/styles';
+import { useTheme as useCustomTheme } from '../../context/ThemeContext';
 import {
   Container,
   Box,
@@ -38,6 +40,8 @@ import './Books.scss';
 const Books = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const { isDarkMode } = useCustomTheme();
 
   // State management
   const [books, setBooks] = useState([]);
@@ -251,16 +255,23 @@ const Books = () => {
   };
 
   return (
-    <div className="books-page">
+    <Box 
+      className="books-page"
+      sx={{
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary,
+        minHeight: '100vh'
+      }}
+    >
       <Container maxWidth="lg" sx={{ py: { xs: 2, md: 4 } }}>
         {/* Clean Header */}
         <Box sx={{ mb: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 4 }}>
             <Box>
-              <Typography variant="h4" fontWeight={700} color="#1a1a1a" gutterBottom>
+              <Typography variant="h4" fontWeight={700} color={theme.palette.text.primary} gutterBottom>
                 Books
               </Typography>
-              <Typography variant="body1" color="#64748b">
+              <Typography variant="body1" color={theme.palette.text.secondary}>
                 Discover and explore our collection
               </Typography>
             </Box>
@@ -278,11 +289,12 @@ const Books = () => {
                   textTransform: 'none',
                   fontWeight: 600,
                   fontSize: '0.95rem',
-                  backgroundColor: '#0f172a',
+                  backgroundColor: isDarkMode ? '#ffffff' : '#0f172a',
+                  color: isDarkMode ? '#000000' : '#ffffff',
                   boxShadow: 'none',
                   '&:hover': {
-                    backgroundColor: '#1e293b',
-                    boxShadow: '0 4px 12px rgba(15, 23, 42, 0.15)'
+                    backgroundColor: isDarkMode ? '#f3f4f6' : '#1e293b',
+                    boxShadow: isDarkMode ? '0 4px 12px rgba(0, 0, 0, 0.3)' : '0 4px 12px rgba(15, 23, 42, 0.15)'
                   }
                 }}
               >
@@ -299,10 +311,10 @@ const Books = () => {
             alignItems: 'center',
             mb: 3,
             p: 3,
-            backgroundColor: 'white',
+            backgroundColor: theme.palette.background.paper,
             borderRadius: 3,
-            border: '1px solid #e2e8f0',
-            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+            border: `1px solid ${theme.palette.border.main}`,
+            boxShadow: isDarkMode ? '0 1px 3px 0 rgba(0, 0, 0, 0.3)' : '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
           }}>
             <TextField
               placeholder="Search books, authors, or descriptions..."
@@ -314,21 +326,21 @@ const Books = () => {
                 flex: 1,
                 '& .MuiOutlinedInput-root': {
                   borderRadius: 2,
-                  backgroundColor: '#f8fafc',
-                  border: '1px solid #e2e8f0',
+                  backgroundColor: theme.palette.background.secondary,
+                  border: `1px solid ${theme.palette.border.main}`,
                   '&:hover': {
-                    borderColor: '#cbd5e1'
+                    borderColor: theme.palette.border.dark
                   },
                   '&.Mui-focused': {
-                    backgroundColor: 'white',
-                    borderColor: '#0f172a'
+                    backgroundColor: theme.palette.background.paper,
+                    borderColor: theme.palette.text.primary
                   }
                 }
               }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Search sx={{ color: '#94a3b8', fontSize: 20 }} />
+                    <Search sx={{ color: theme.palette.text.tertiary, fontSize: 20 }} />
                   </InputAdornment>
                 )
               }}
@@ -342,9 +354,9 @@ const Books = () => {
                 label="Genre"
                 sx={{ 
                   borderRadius: 2,
-                  backgroundColor: '#f8fafc',
+                  backgroundColor: theme.palette.background.secondary,
                   '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#e2e8f0'
+                    borderColor: theme.palette.border.main
                   }
                 }}
               >
@@ -363,9 +375,9 @@ const Books = () => {
                 label="Sort By"
                 sx={{ 
                   borderRadius: 2,
-                  backgroundColor: '#f8fafc',
+                  backgroundColor: theme.palette.background.secondary,
                   '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#e2e8f0'
+                    borderColor: theme.palette.border.main
                   }
                 }}
               >
@@ -387,9 +399,9 @@ const Books = () => {
                 label="Year Range"
                 sx={{ 
                   borderRadius: 2,
-                  backgroundColor: '#f8fafc',
+                  backgroundColor: theme.palette.background.secondary,
                   '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#e2e8f0'
+                    borderColor: theme.palette.border.main
                   }
                 }}
               >
@@ -410,9 +422,9 @@ const Books = () => {
                 label="Rating"
                 sx={{ 
                   borderRadius: 2,
-                  backgroundColor: '#f8fafc',
+                  backgroundColor: theme.palette.background.secondary,
                   '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#e2e8f0'
+                    borderColor: theme.palette.border.main
                   }
                 }}
               >
@@ -430,13 +442,13 @@ const Books = () => {
                 size="small"
                 startIcon={<FilterList />}
                 sx={{
-                  color: '#64748b',
+                  color: theme.palette.text.secondary,
                   textTransform: 'none',
                   fontWeight: 500,
                   borderRadius: 2,
                   px: 2,
                   '&:hover': {
-                    backgroundColor: '#f1f5f9'
+                    backgroundColor: theme.palette.background.secondary
                   }
                 }}
               >
@@ -461,8 +473,9 @@ const Books = () => {
                 key={index}
                 sx={{
                   borderRadius: 3,
-                  border: '1px solid #e2e8f0',
-                  boxShadow: 'none'
+                  border: `1px solid ${theme.palette.border.main}`,
+                  boxShadow: 'none',
+                  backgroundColor: theme.palette.background.paper
                 }}
               >
                 <CardContent sx={{ p: 4 }}>
@@ -514,7 +527,7 @@ const Books = () => {
           </Box>
         ) : books.length === 0 ? (
           <Box sx={{ textAlign: 'center', py: 8 }}>
-            <MenuBook sx={{ fontSize: 80, color: '#e5e7eb', mb: 2 }} />
+            <MenuBook sx={{ fontSize: 80, color: theme.palette.border.main, mb: 2 }} />
             <Typography variant="h5" fontWeight={600} color="text.secondary" gutterBottom>
               No books found
             </Typography>
@@ -531,7 +544,8 @@ const Books = () => {
                   borderRadius: 2,
                   textTransform: 'none',
                   fontWeight: 600,
-                  backgroundColor: '#1f2937'
+                  backgroundColor: isDarkMode ? '#ffffff' : '#1f2937',
+                  color: isDarkMode ? '#000000' : '#ffffff'
                 }}
               >
                 Add First Book
@@ -546,12 +560,13 @@ const Books = () => {
                 className="book-card"
                 sx={{
                   borderRadius: 3,
-                  border: '1px solid #e2e8f0',
+                  border: `1px solid ${theme.palette.border.main}`,
                   boxShadow: 'none',
+                  backgroundColor: theme.palette.background.paper,
                   transition: 'all 0.2s ease',
                   '&:hover': {
-                    borderColor: '#cbd5e1',
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                    borderColor: theme.palette.border.dark,
+                    boxShadow: isDarkMode ? '0 4px 6px -1px rgba(0, 0, 0, 0.3)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                   }
                 }}
               >
@@ -562,16 +577,16 @@ const Books = () => {
                       sx={{
                         width: 80,
                         height: 110,
-                        backgroundColor: '#f1f5f9',
+                        backgroundColor: theme.palette.background.secondary,
                         borderRadius: 2,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         flexShrink: 0,
-                        border: '1px solid #e2e8f0'
+                        border: `1px solid ${theme.palette.border.main}`
                       }}
                     >
-                      <MenuBook sx={{ fontSize: 28, color: '#94a3b8' }} />
+                      <MenuBook sx={{ fontSize: 28, color: theme.palette.text.tertiary }} />
                     </Box>
 
                     {/* Book Content */}
@@ -581,7 +596,7 @@ const Books = () => {
                           <Typography 
                             variant="h6" 
                             fontWeight={600} 
-                            color="#1a1a1a" 
+                            color={theme.palette.text.primary} 
                             gutterBottom
                             sx={{ 
                               overflow: 'hidden',
@@ -591,7 +606,7 @@ const Books = () => {
                           >
                             {book.title}
                           </Typography>
-                          <Typography variant="body2" color="#64748b" sx={{ mb: 1 }}>
+                          <Typography variant="body2" color={theme.palette.text.secondary} sx={{ mb: 1 }}>
                             by {book.author}
                           </Typography>
                         </Box>
@@ -600,8 +615,8 @@ const Books = () => {
                           label={book.genre} 
                           size="small"
                           sx={{ 
-                            backgroundColor: '#f1f5f9',
-                            color: '#475569',
+                            backgroundColor: theme.palette.background.secondary,
+                            color: theme.palette.text.secondary,
                             fontWeight: 500,
                             fontSize: '0.75rem'
                           }} 
@@ -610,7 +625,7 @@ const Books = () => {
 
                       <Typography 
                         variant="body2" 
-                        color="#64748b" 
+                        color={theme.palette.text.secondary}
                         sx={{ 
                           mb: 3, 
                           lineHeight: 1.5,
@@ -633,15 +648,15 @@ const Books = () => {
                             size="small"
                             sx={{ '& .MuiRating-iconFilled': { color: '#f59e0b' } }}
                           />
-                          <Typography variant="body2" color="#64748b" fontWeight={500}>
+                          <Typography variant="body2" color={theme.palette.text.secondary} fontWeight={500}>
                             {book.averageRating}
                           </Typography>
-                          <Typography variant="body2" color="#94a3b8">
+                          <Typography variant="body2" color={theme.palette.text.tertiary}>
                             ({book.reviewCount})
                           </Typography>
                         </Box>
                         
-                        <Typography variant="body2" color="#94a3b8">
+                        <Typography variant="body2" color={theme.palette.text.tertiary}>
                           {book.publishedYear}
                         </Typography>
                       </Box>
@@ -658,12 +673,13 @@ const Books = () => {
                             textTransform: 'none',
                             fontWeight: 600,
                             fontSize: '0.875rem',
-                            backgroundColor: '#0f172a',
+                            backgroundColor: isDarkMode ? '#ffffff' : '#0f172a',
+                            color: isDarkMode ? '#000000' : '#ffffff',
                             boxShadow: 'none',
                             px: 3,
                             py: 1,
                             '&:hover': {
-                              backgroundColor: '#1e293b',
+                              backgroundColor: isDarkMode ? '#f3f4f6' : '#1e293b',
                               boxShadow: 'none'
                             }
                           }}
@@ -682,13 +698,13 @@ const Books = () => {
                               textTransform: 'none',
                               fontWeight: 500,
                               fontSize: '0.875rem',
-                              borderColor: '#e2e8f0',
-                              color: '#64748b',
+                              borderColor: theme.palette.border.main,
+                              color: theme.palette.text.secondary,
                               px: 3,
                               py: 1,
                               '&:hover': {
-                                borderColor: '#cbd5e1',
-                                backgroundColor: '#f8fafc'
+                                borderColor: theme.palette.border.dark,
+                                backgroundColor: theme.palette.background.secondary
                               }
                             }}
                           >
@@ -717,10 +733,10 @@ const Books = () => {
                   borderRadius: 2,
                   fontWeight: 600,
                   '&.Mui-selected': {
-                    backgroundColor: '#1f2937',
-                    color: 'white',
+                    backgroundColor: isDarkMode ? '#ffffff' : '#1f2937',
+                    color: isDarkMode ? '#000000' : 'white',
                     '&:hover': {
-                      backgroundColor: '#111827'
+                      backgroundColor: isDarkMode ? '#f3f4f6' : '#111827'
                     }
                   }
                 }
@@ -729,7 +745,7 @@ const Books = () => {
           </Box>
         )}
       </Container>
-    </div>
+    </Box>
   );
 };
 

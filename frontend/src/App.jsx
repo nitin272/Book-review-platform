@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { CustomThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Layout/Navbar';
 
 // Pages
@@ -12,6 +13,7 @@ import AddBook from './pages/AddBook/AddBook';
 import EditBook from './pages/EditBook/EditBook';
 import Profile from './pages/Profile/Profile';
 import Review from './pages/Review/Review';
+import Community from './pages/Community/Community';
 
 import './App.scss';
 
@@ -32,23 +34,26 @@ const Layout = ({ children }) => {
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/books" element={<Books />} />
-            <Route path="/books/:id" element={<BookDetails />} />
-            <Route path="/books/:id/edit" element={<EditBook />} />
-            <Route path="/books/:id/review" element={<Review />} />
-            <Route path="/add-book" element={<AddBook />} />
-            <Route path="/profile" element={<Profile />} />
-          </Routes>
-        </Layout>
-      </Router>
-    </AuthProvider>
+    <CustomThemeProvider>
+      <AuthProvider>
+        <Router>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/books" element={<Books />} />
+              <Route path="/books/:id" element={<BookDetails />} />
+              <Route path="/books/:id/edit" element={<EditBook />} />
+              <Route path="/books/:id/review" element={<Review />} />
+              <Route path="/add-book" element={<AddBook />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/community" element={<Community />} />
+            </Routes>
+          </Layout>
+        </Router>
+      </AuthProvider>
+    </CustomThemeProvider>
   );
 }
 
