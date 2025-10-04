@@ -18,7 +18,10 @@ import {
   useMediaQuery,
   Divider,
   Fade,
-  Tooltip
+  Tooltip,
+  TextField,
+  InputAdornment,
+  Collapse
 } from '@mui/material';
 import {
   MenuBook,
@@ -44,6 +47,8 @@ const Navbar = () => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleLogout = () => {
     logout();
@@ -63,12 +68,34 @@ const Navbar = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleSearchClick = () => {
+    setSearchOpen(!searchOpen);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/books?search=${encodeURIComponent(searchTerm.trim())}`);
+      setSearchOpen(false);
+      setSearchTerm('');
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchSubmit(e);
+    }
+  };
+
   const isActive = (path) => location.pathname === path;
 
   const navItems = [
     { label: 'Books', path: '/books', description: 'Browse books' },
-    { label: 'Community', path: '/community', description: 'Join discussions' },
-    { label: 'Reviews', path: '/reviews', description: 'Read reviews' }
+    { label: 'Community', path: '/community', description: 'Join discussions' }
   ];
 
   const drawer = (
@@ -382,29 +409,70 @@ const Navbar = () => {
 
             {/* Search Bar (Desktop) */}
             {!isMobile && (
-              <Box sx={{
-                display: 'flex',
-                alignItems: 'center',
-                backgroundColor: theme.palette.background.secondary,
-                borderRadius: 3,
-                px: 3,
-                py: 1.5,
-                mr: 4,
-                minWidth: 280,
-                border: `1px solid ${theme.palette.border.main}`,
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                '&:hover': {
-                  borderColor: theme.palette.border.dark,
-                  backgroundColor: theme.palette.background.tertiary,
-                  transform: 'translateY(-1px)',
-                  boxShadow: isDarkMode ? '0 4px 6px -1px rgba(0, 0, 0, 0.3)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                }
-              }}>
-                <Search sx={{ color: theme.palette.text.tertiary, fontSize: 22, mr: 2 }} />
-                <Typography variant="body1" sx={{ color: theme.palette.text.tertiary, fontWeight: 500 }}>
-                  Search books...
-                </Typography>
+              <Box sx={{ mr: 4, minWidth: 280 }}>
+                {!searchOpen ? (
+                  <Box 
+                    onClick={handleSearchClick}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      backgroundColor: theme.palette.background.secondary,
+                      borderRadius: 3,
+                      px: 3,
+                      py: 1.5,
+                      border: `1px solid ${theme.palette.border.main}`,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      '&:hover': {
+                        borderColor: theme.palette.border.dark,
+                        backgroundColor: theme.palette.background.tertiary,
+                        transform: 'translateY(-1px)',
+                        boxShadow: isDarkMode ? '0 4px 6px -1px rgba(0, 0, 0, 0.3)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                      }
+                    }}
+                  >
+                    <Search sx={{ color: theme.palette.text.tertiary, fontSize: 22, mr: 2 }} />
+                    <Typography variant="body1" sx={{ color: theme.palette.text.tertiary, fontWeight: 500 }}>
+                      Search books...
+                    </Typography>
+                  </Box>
+                ) : (
+                  <TextField
+                    fullWidth
+                    size="small"
+                    placeholder="Search books, authors, genres..."
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    onKeyPress={handleSearchKeyPress}
+                    onBlur={() => {
+                      if (!searchTerm.trim()) {
+                        setSearchOpen(false);
+                      }
+                    }}
+                    autoFocus
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Search sx={{ color: theme.palette.text.tertiary, fontSize: 20 }} />
+                        </InputAdornment>
+                      ),
+                      sx: {
+                        borderRadius: 3,
+                        backgroundColor: theme.palette.background.paper,
+                        border: `1px solid ${theme.palette.border.dark}`,
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          border: 'none'
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          border: 'none'
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          border: 'none'
+                        }
+                      }
+                    }}
+                  />
+                )}
               </Box>
             )}
 
@@ -573,6 +641,24 @@ const Navbar = () => {
             {/* Mobile Menu Button */}
             {isMobile && (
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                {/* Search Button for Mobile */}
+                <Tooltip title="Search Books">
+                  <IconButton 
+                    onClick={() => navigate('/books')}
+                    sx={{
+                      color: theme.palette.text.secondary,
+                      width: 48,
+                      height: 48,
+                      borderRadius: 3,
+                      '&:hover': { 
+                        backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
+                        transform: 'translateY(-1px)'
+                      }
+                    }}
+                  >
+                    <Search sx={{ fontSize: 24 }} />
+                  </IconButton>
+                </Tooltip>
                 {/* Theme Toggle for Mobile */}
                 <Tooltip title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}>
                   <IconButton 
