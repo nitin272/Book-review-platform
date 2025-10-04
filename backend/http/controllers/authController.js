@@ -20,7 +20,6 @@ export const registerUserController = asyncHandler(async (req, res) => {
 export const loginUserController = asyncHandler(async (req, res) => {
   const result = await loginUserService(req.body);
 
-  // Set HTTP-only cookie
   createTokenCookie(result.token, res);
 
   res.status(200).json({

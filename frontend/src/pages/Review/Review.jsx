@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { bookAPI, reviewAPI } from '../../services/api';
 import { useTheme } from '@mui/material/styles';
 import { useTheme as useCustomTheme } from '../../context/ThemeContext';
 import {
@@ -27,45 +28,38 @@ import {
 } from '@mui/icons-material';
 
 const Review = () => {
-  const { id } = useParams(); // book id
+  const { id } = useParams();
   const [searchParams] = useSearchParams();
   const editReviewId = searchParams.get('edit');
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
   const theme = useTheme();
   const { isDarkMode } = useCustomTheme();
 
-  // State management
+
   const [book, setBook] = useState(null);
   const [formData, setFormData] = useState({
     rating: 0,
     reviewText: ''
   });
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
   const isEditing = Boolean(editReviewId);
 
-  // Mock data
-  const mockBook = {
-    _id: id,
-    title: 'The Great Gatsby',
-    author: 'F. Scott Fitzgerald',
-    genre: 'Fiction',
-    publishedYear: 1925,
-    averageRating: 4.2,
-    reviewCount: 156
-  };
 
-  const mockExistingReview = {
-    _id: editReviewId,
-    rating: 4,
-    reviewText: 'This is an existing review that I want to edit. The book was quite good with excellent character development.'
-  };
 
-  // Redirect if not logged in
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   if (!user) {
     navigate('/login');
     return null;
@@ -78,21 +72,31 @@ const Review = () => {
   const fetchBookAndReview = async () => {
     setFetchLoading(true);
     try {
-      // Simulate API calls
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      setBook(mockBook);
-      
-      if (isEditing) {
-        // Fetch existing review for editing
-        setFormData({
-          rating: mockExistingReview.rating,
-          reviewText: mockExistingReview.reviewText
-        });
+
+      const bookResponse = await bookAPI.getBook(id);
+      if (bookResponse.data.success) {
+        setBook(bookResponse.data.data);
+      } else {
+        setError('Book not found.');
+        return;
       }
-      
+
+      if (isEditing) {
+        const reviewResponse = await reviewAPI.getReview(editReviewId);
+        if (reviewResponse.data.success) {
+          const review = reviewResponse.data.data;
+          setFormData({
+            rating: review.rating,
+            reviewText: review.reviewText
+          });
+        } else {
+          setError('Review not found.');
+        }
+      }
+
     } catch (err) {
-      setError('Failed to fetch book details. Please try again.');
+      console.error('Error fetching data:', err);
+      setError(err.response?.data?.message || 'Failed to fetch book details. Please try again.');
     } finally {
       setFetchLoading(false);
     }
@@ -103,7 +107,7 @@ const Review = () => {
       ...prev,
       rating: newValue
     }));
-    
+
     if (error) setError('');
     if (success) setSuccess('');
   };
@@ -113,65 +117,65 @@ const Review = () => {
       ...prev,
       reviewText: e.target.value
     }));
-    
+
     if (error) setError('');
     if (success) setSuccess('');
   };
 
   const validateForm = () => {
     const errors = [];
-    
+
     if (formData.rating === 0) {
       errors.push('Please select a rating');
     }
-    
+
     if (!formData.reviewText.trim()) {
       errors.push('Please write a review');
     }
-    
+
     if (formData.reviewText.trim().length < 10) {
       errors.push('Review must be at least 10 characters long');
     }
-    
+
     return errors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
       setError(validationErrors.join(', '));
       return;
     }
-    
-    setLoading(true);
+
+    setSubmitting(true);
     setError('');
-    
+
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
       const reviewData = {
-        ...formData,
         bookId: id,
-        userId: user.id,
-        createdAt: isEditing ? mockExistingReview.createdAt : new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        rating: formData.rating,
+        reviewText: formData.reviewText
       };
-      
-      console.log(isEditing ? 'Review updated:' : 'Review created:', reviewData);
-      setSuccess(isEditing ? 'Review updated successfully!' : 'Review submitted successfully!');
-      
-      // Redirect to book details after a short delay
+
+      if (isEditing) {
+        await reviewAPI.updateReview(editReviewId, reviewData);
+        setSuccess('Review updated successfully!');
+      } else {
+        await reviewAPI.createReview(reviewData);
+        setSuccess('Review submitted successfully!');
+      }
+
       setTimeout(() => {
         navigate(`/books/${id}`);
       }, 1500);
-      
+
     } catch (err) {
-      setError(isEditing ? 'Failed to update review. Please try again.' : 'Failed to submit review. Please try again.');
+      console.error('Error submitting review:', err);
+      setError(err.response?.data?.message || (isEditing ? 'Failed to update review. Please try again.' : 'Failed to submit review. Please try again.'));
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -181,76 +185,76 @@ const Review = () => {
 
   if (fetchLoading) {
     return (
-      <Box 
+      <Box
         sx={{
           backgroundColor: theme.palette.background.default,
           minHeight: '100vh'
         }}
       >
         <Container maxWidth="md" sx={{ py: 4 }}>
-        {/* Breadcrumbs skeleton */}
-        <Skeleton variant="text" width="30%" height={20} sx={{ mb: 3 }} />
-        
-        {/* Header skeleton */}
-        <Skeleton variant="text" width={120} height={32} sx={{ mb: 3 }} />
-        <Skeleton variant="text" width="50%" height={40} sx={{ mb: 1 }} />
-        <Skeleton variant="text" width="40%" height={24} sx={{ mb: 4 }} />
-        
-        {/* Book info card skeleton */}
-        <Card sx={{ borderRadius: 3, mb: 4, border: '1px solid #e2e8f0', boxShadow: 'none' }}>
-          <CardContent sx={{ p: 4 }}>
-            <Box sx={{ display: 'flex', gap: 3, alignItems: 'center' }}>
-              <Skeleton variant="rectangular" width={80} height={100} sx={{ borderRadius: 2, flexShrink: 0 }} />
-              <Box sx={{ flex: 1 }}>
-                <Skeleton variant="text" width="70%" height={28} sx={{ mb: 1 }} />
-                <Skeleton variant="text" width="50%" height={24} sx={{ mb: 2 }} />
-                <Box sx={{ display: 'flex', gap: 2 }}>
-                  <Skeleton variant="rectangular" width={60} height={20} sx={{ borderRadius: 1 }} />
-                  <Skeleton variant="rectangular" width={50} height={20} sx={{ borderRadius: 1 }} />
-                  <Skeleton variant="text" width={100} height={20} />
+          {/* Breadcrumbs skeleton */}
+          <Skeleton variant="text" width="30%" height={20} sx={{ mb: 3 }} />
+
+          {/* Header skeleton */}
+          <Skeleton variant="text" width={120} height={32} sx={{ mb: 3 }} />
+          <Skeleton variant="text" width="50%" height={40} sx={{ mb: 1 }} />
+          <Skeleton variant="text" width="40%" height={24} sx={{ mb: 4 }} />
+
+          {/* Book info card skeleton */}
+          <Card sx={{ borderRadius: 3, mb: 4, border: '1px solid #e2e8f0', boxShadow: 'none' }}>
+            <CardContent sx={{ p: 4 }}>
+              <Box sx={{ display: 'flex', gap: 3, alignItems: 'center' }}>
+                <Skeleton variant="rectangular" width={80} height={100} sx={{ borderRadius: 2, flexShrink: 0 }} />
+                <Box sx={{ flex: 1 }}>
+                  <Skeleton variant="text" width="70%" height={28} sx={{ mb: 1 }} />
+                  <Skeleton variant="text" width="50%" height={24} sx={{ mb: 2 }} />
+                  <Box sx={{ display: 'flex', gap: 2 }}>
+                    <Skeleton variant="rectangular" width={60} height={20} sx={{ borderRadius: 1 }} />
+                    <Skeleton variant="rectangular" width={50} height={20} sx={{ borderRadius: 1 }} />
+                    <Skeleton variant="text" width={100} height={20} />
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          </CardContent>
-        </Card>
-        
-        {/* Review form skeleton */}
-        <Card sx={{ borderRadius: 3, border: '1px solid #e2e8f0', boxShadow: 'none' }}>
-          <CardContent sx={{ p: 4 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 4 }}>
-              <Skeleton variant="rectangular" width={48} height={48} sx={{ borderRadius: 2 }} />
-              <Skeleton variant="text" width={150} height={28} />
-            </Box>
-            
-            {/* Rating section skeleton */}
-            <Box sx={{ mb: 4 }}>
-              <Skeleton variant="text" width={80} height={24} sx={{ mb: 1 }} />
-              <Skeleton variant="text" width="60%" height={16} sx={{ mb: 2 }} />
-              <Skeleton variant="rectangular" width={200} height={32} sx={{ borderRadius: 1 }} />
-            </Box>
-            
-            {/* Review text section skeleton */}
-            <Box sx={{ mb: 4 }}>
-              <Skeleton variant="text" width={80} height={24} sx={{ mb: 1 }} />
-              <Skeleton variant="text" width="70%" height={16} sx={{ mb: 2 }} />
-              <Skeleton variant="rectangular" width="100%" height={120} sx={{ borderRadius: 2, mb: 1 }} />
-              <Skeleton variant="text" width={200} height={16} />
-            </Box>
-            
-            {/* Buttons skeleton */}
-            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
-              <Skeleton variant="rectangular" width={80} height={40} sx={{ borderRadius: 2 }} />
-              <Skeleton variant="rectangular" width={120} height={40} sx={{ borderRadius: 2 }} />
-            </Box>
-          </CardContent>
-        </Card>
-      </Container>
+            </CardContent>
+          </Card>
+
+          {/* Review form skeleton */}
+          <Card sx={{ borderRadius: 3, border: '1px solid #e2e8f0', boxShadow: 'none' }}>
+            <CardContent sx={{ p: 4 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 4 }}>
+                <Skeleton variant="rectangular" width={48} height={48} sx={{ borderRadius: 2 }} />
+                <Skeleton variant="text" width={150} height={28} />
+              </Box>
+
+              {/* Rating section skeleton */}
+              <Box sx={{ mb: 4 }}>
+                <Skeleton variant="text" width={80} height={24} sx={{ mb: 1 }} />
+                <Skeleton variant="text" width="60%" height={16} sx={{ mb: 2 }} />
+                <Skeleton variant="rectangular" width={200} height={32} sx={{ borderRadius: 1 }} />
+              </Box>
+
+              {/* Review text section skeleton */}
+              <Box sx={{ mb: 4 }}>
+                <Skeleton variant="text" width={80} height={24} sx={{ mb: 1 }} />
+                <Skeleton variant="text" width="70%" height={16} sx={{ mb: 2 }} />
+                <Skeleton variant="rectangular" width="100%" height={120} sx={{ borderRadius: 2, mb: 1 }} />
+                <Skeleton variant="text" width={200} height={16} />
+              </Box>
+
+              {/* Buttons skeleton */}
+              <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
+                <Skeleton variant="rectangular" width={80} height={40} sx={{ borderRadius: 2 }} />
+                <Skeleton variant="rectangular" width={120} height={40} sx={{ borderRadius: 2 }} />
+              </Box>
+            </CardContent>
+          </Card>
+        </Container>
       </Box>
     );
   }
 
   return (
-    <Box 
+    <Box
       className="review-page"
       sx={{
         backgroundColor: theme.palette.background.default,
@@ -291,7 +295,7 @@ const Review = () => {
           >
             Back
           </Button>
-          
+
           <Box sx={{ flex: 1 }}>
             <Typography variant="h3" fontWeight={800} color="text.primary" gutterBottom>
               {isEditing ? 'Edit Review' : 'Write Review'}
@@ -304,8 +308,8 @@ const Review = () => {
 
         {/* Success/Error Messages */}
         {success && (
-          <Alert 
-            severity="success" 
+          <Alert
+            severity="success"
             sx={{ mb: 3, borderRadius: 2 }}
             onClose={() => setSuccess('')}
           >
@@ -314,8 +318,8 @@ const Review = () => {
         )}
 
         {error && (
-          <Alert 
-            severity="error" 
+          <Alert
+            severity="error"
             sx={{ mb: 3, borderRadius: 2 }}
             onClose={() => setError('')}
           >
@@ -342,7 +346,7 @@ const Review = () => {
               >
                 <MenuBook sx={{ fontSize: 32, color: '#9ca3af' }} />
               </Box>
-              
+
               <Box sx={{ flex: 1 }}>
                 <Typography variant="h5" fontWeight={700} gutterBottom>
                   {book?.title}
@@ -350,7 +354,7 @@ const Review = () => {
                 <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
                   by {book?.author}
                 </Typography>
-                
+
                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
                   <Chip label={book?.genre} size="small" />
                   <Chip label={book?.publishedYear} size="small" variant="outlined" />
@@ -394,7 +398,7 @@ const Review = () => {
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                   How would you rate this book?
                 </Typography>
-                
+
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                   <Rating
                     value={formData.rating}
@@ -425,7 +429,7 @@ const Review = () => {
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                   Share your detailed thoughts about the book
                 </Typography>
-                
+
                 <TextField
                   fullWidth
                   multiline
@@ -439,7 +443,7 @@ const Review = () => {
                     }
                   }}
                 />
-                
+
                 <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                   {formData.reviewText.length} characters (minimum 10 required)
                 </Typography>
@@ -451,7 +455,7 @@ const Review = () => {
                   type="button"
                   variant="outlined"
                   onClick={handleCancel}
-                  disabled={loading}
+                  disabled={submitting}
                   sx={{
                     borderRadius: 2,
                     textTransform: 'none',
@@ -468,12 +472,12 @@ const Review = () => {
                 >
                   Cancel
                 </Button>
-                
+
                 <Button
                   type="submit"
                   variant="contained"
-                  disabled={loading}
-                  startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <Save />}
+                  disabled={submitting}
+                  startIcon={submitting ? <CircularProgress size={20} color="inherit" /> : <Save />}
                   sx={{
                     borderRadius: 2,
                     textTransform: 'none',
@@ -491,7 +495,7 @@ const Review = () => {
                     }
                   }}
                 >
-                  {loading ? (isEditing ? 'Updating...' : 'Submitting...') : (isEditing ? 'Update Review' : 'Submit Review')}
+                  {submitting ? (isEditing ? 'Updating...' : 'Submitting...') : (isEditing ? 'Update Review' : 'Submit Review')}
                 </Button>
               </Box>
             </Box>
@@ -499,25 +503,25 @@ const Review = () => {
         </Card>
 
         {/* Guidelines */}
-        <Box sx={{ 
-          mt: 4, 
-          p: 3, 
-          backgroundColor: theme.palette.background.secondary, 
+        <Box sx={{
+          mt: 4,
+          p: 3,
+          backgroundColor: theme.palette.background.secondary,
           borderRadius: 2,
           border: `1px solid ${theme.palette.border.light}`
         }}>
-          <Typography 
-            variant="h6" 
-            fontWeight={600} 
+          <Typography
+            variant="h6"
+            fontWeight={600}
             gutterBottom
             sx={{ color: theme.palette.text.primary }}
           >
             Review Guidelines:
           </Typography>
-          <Typography 
-            variant="body2" 
-            color={theme.palette.text.secondary} 
-            component="ul" 
+          <Typography
+            variant="body2"
+            color={theme.palette.text.secondary}
+            component="ul"
             sx={{ pl: 2 }}
           >
             <li>Be honest and constructive in your feedback</li>

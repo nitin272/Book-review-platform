@@ -19,6 +19,6 @@ router.post('/', authenticate, createBookController);
 router.put('/:id', authenticate, updateBookController);
 router.delete('/:id', authenticate, deleteBookController);
 
-// User's books
+
 router.get('/user/my-books', authenticate, getUserBooksController);
 export default router;

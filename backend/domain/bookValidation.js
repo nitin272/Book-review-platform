@@ -1,4 +1,4 @@
-// Pure domain validation functions for books - no external dependencies
+
 
 export function validateBookTitle(title) {
   if (!title || typeof title !== 'string') {

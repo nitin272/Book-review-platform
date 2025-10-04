@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "nodemon node server.js",
+    "start": "node server.js",
+    "build": "echo 'No build step required'",
     "lint": "eslint . --ext .js"
   },
   "dependencies": {

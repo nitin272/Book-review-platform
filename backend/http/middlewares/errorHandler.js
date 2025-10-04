@@ -37,7 +37,7 @@ const sendErrorDev = (err, res) => {
 };
 
 const sendErrorProd = (err, res) => {
-  // Operational, trusted error: send message to client
+
   if (err.isOperational) {
     res.status(err.statusCode).json({
       success: false,
@@ -45,7 +45,7 @@ const sendErrorProd = (err, res) => {
       timestamp: new Date().toISOString(),
     });
   } else {
-    // Programming or other unknown error: don't leak error details
+
     console.error('ERROR 💥:', err);
     
     res.status(500).json({
@@ -66,7 +66,6 @@ const errorHandler = (err, req, res, next) => {
     let error = { ...err };
     error.message = err.message;
 
-    // Handle specific error types
     if (error.name === 'CastError') error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
     if (error.name === 'ValidationError') error = handleValidationErrorDB(error);

@@ -49,7 +49,6 @@ const Community = () => {
     const { isDarkMode } = useCustomTheme();
     const [activeTab, setActiveTab] = useState(0);
 
-    // Mock community data
     const discussionThreads = [
         {
             id: 1,

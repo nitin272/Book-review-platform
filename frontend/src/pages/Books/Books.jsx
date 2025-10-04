@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { bookAPI } from '../../services/api';
 import { useTheme } from '@mui/material/styles';
 import { useTheme as useCustomTheme } from '../../context/ThemeContext';
 import {
@@ -43,8 +44,6 @@ const Books = () => {
   const theme = useTheme();
   const { isDarkMode } = useCustomTheme();
   const [searchParams, setSearchParams] = useSearchParams();
-
-  // State management
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -56,73 +55,10 @@ const Books = () => {
   const [yearFilter, setYearFilter] = useState('');
   const [ratingFilter, setRatingFilter] = useState('');
 
-  // Mock data for now (will be replaced with API calls)
-  const mockBooks = [
-    {
-      _id: '1',
-      title: 'The Great Gatsby',
-      author: 'F. Scott Fitzgerald',
-      description: 'A classic American novel set in the Jazz Age, exploring themes of wealth, love, and the American Dream.',
-      genre: 'Fiction',
-      publishedYear: 1925,
-      averageRating: 4.2,
-      reviewCount: 156,
-      addedBy: { name: 'John Doe' },
-      createdAt: '2024-01-15'
-    },
-    {
-      _id: '2',
-      title: 'To Kill a Mockingbird',
-      author: 'Harper Lee',
-      description: 'A gripping tale of racial injustice and childhood innocence in the American South.',
-      genre: 'Fiction',
-      publishedYear: 1960,
-      averageRating: 4.5,
-      reviewCount: 203,
-      addedBy: { name: 'Jane Smith' },
-      createdAt: '2024-01-10'
-    },
-    {
-      _id: '3',
-      title: 'Dune',
-      author: 'Frank Herbert',
-      description: 'An epic science fiction novel set on the desert planet Arrakis.',
-      genre: 'Science Fiction',
-      publishedYear: 1965,
-      averageRating: 4.3,
-      reviewCount: 89,
-      addedBy: { name: 'Mike Johnson' },
-      createdAt: '2024-01-08'
-    },
-    {
-      _id: '4',
-      title: 'Pride and Prejudice',
-      author: 'Jane Austen',
-      description: 'A romantic novel that critiques the British landed gentry at the end of the 18th century.',
-      genre: 'Romance',
-      publishedYear: 1813,
-      averageRating: 4.4,
-      reviewCount: 178,
-      addedBy: { name: 'Sarah Wilson' },
-      createdAt: '2024-01-05'
-    },
-    {
-      _id: '5',
-      title: '1984',
-      author: 'George Orwell',
-      description: 'A dystopian social science fiction novel about totalitarian control.',
-      genre: 'Dystopian',
-      publishedYear: 1949,
-      averageRating: 4.6,
-      reviewCount: 234,
-      addedBy: { name: 'David Brown' },
-      createdAt: '2024-01-03'
-    }
-  ];
+  const availableGenres = ['Fiction', 'Science Fiction', 'Romance', 'Mystery', 'Thriller', 'Fantasy', 'Biography', 'History', 'Dystopian'];
 
   const genres = ['Fiction', 'Science Fiction', 'Romance', 'Mystery', 'Thriller', 'Fantasy', 'Biography', 'History', 'Dystopian'];
 
-  // Handle URL search parameters
   useEffect(() => {
     const urlSearchTerm = searchParams.get('search');
     if (urlSearchTerm && urlSearchTerm !== searchTerm) {
@@ -138,11 +74,27 @@ const Books = () => {
   const fetchBooks = async () => {
     setLoading(true);
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 800));
+      const params = {
+        page: currentPage,
+        limit: 5,
+      };
+
+      if (searchTerm.trim()) {
+        params.search = searchTerm.trim();
+      }
+
+      if (selectedGenre) {
+        params.genre = selectedGenre;
+      }
+
+      const response = await bookAPI.getBooks(params);
       
-      // Mock filtering and pagination logic
-      let filteredBooks = mockBooks;
+      if (!response.data.success) {
+        throw new Error('Failed to fetch books');
+      }
+
+      const { books, pagination } = response.data.data;
+      let filteredBooks = books;
       
       if (searchTerm) {
         filteredBooks = filteredBooks.filter(book => 
@@ -182,8 +134,6 @@ const Books = () => {
           }
         });
       }
-      
-      // Sort books
       switch (sortBy) {
         case 'newest':
           filteredBooks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -209,17 +159,12 @@ const Books = () => {
         default:
           break;
       }
-      
-      // Pagination (5 books per page as per requirements)
-      const booksPerPage = 5;
-      const startIndex = (currentPage - 1) * booksPerPage;
-      const paginatedBooks = filteredBooks.slice(startIndex, startIndex + booksPerPage);
-      
-      setBooks(paginatedBooks);
-      setTotalPages(Math.ceil(filteredBooks.length / booksPerPage));
+      setBooks(filteredBooks);
+      setTotalPages(pagination.totalPages);
       setError('');
     } catch (err) {
-      setError('Failed to fetch books. Please try again.');
+      console.error('Error fetching books:', err);
+      setError(err.response?.data?.message || 'Failed to fetch books. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -566,7 +511,7 @@ const Books = () => {
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             {books.map((book) => (
               <Card 
-                key={book._id}
+                key={book.id}
                 className="book-card"
                 sx={{
                   borderRadius: 3,
@@ -675,7 +620,7 @@ const Books = () => {
                       <Box sx={{ display: 'flex', gap: 2 }}>
                         <Button
                           component={Link}
-                          to={`/books/${book._id}`}
+                          to={`/books/${book.id}`}
                           variant="contained"
                           size="small"
                           sx={{
@@ -700,7 +645,7 @@ const Books = () => {
                         {user && (
                           <Button
                             component={Link}
-                            to={`/books/${book._id}/review`}
+                            to={`/books/${book.id}/review`}
                             variant="outlined"
                             size="small"
                             sx={{

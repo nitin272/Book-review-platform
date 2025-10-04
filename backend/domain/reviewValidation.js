@@ -1,4 +1,3 @@
-// Pure domain validation functions for reviews - no external dependencies
 
 export function validateReviewRating(rating) {
   if (rating === undefined || rating === null) {
@@ -62,8 +61,7 @@ export function calculateAverageRating(ratings) {
   
   const sum = ratings.reduce((acc, rating) => acc + rating, 0);
   const average = sum / ratings.length;
-  
-  // Round to 1 decimal place
+
   return Math.round(average * 10) / 10;
 }
 

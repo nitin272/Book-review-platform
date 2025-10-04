@@ -1,6 +1,8 @@
 import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { useTheme } from '@mui/material/styles';
+import { useTheme as useCustomTheme } from '../../context/ThemeContext';
 import {
   Box,
   TextField,
@@ -13,15 +15,13 @@ import {
   Stack,
   Chip,
   CircularProgress,
-  Fade,
-  useTheme
+  Fade
 } from '@mui/material';
 import {
   Email,
   Lock,
   Visibility,
   VisibilityOff,
-  Google,
   ArrowForward
 } from '@mui/icons-material';
 
@@ -31,6 +31,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const theme = useTheme();
+  const { isDarkMode } = useCustomTheme();
 
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -56,20 +57,20 @@ const Login = () => {
     setLoading(false);
   };
 
-  const handleGoogleLogin = () => {
-    setError('Google authentication will be available soon');
-  };
+
 
   return (
     <Box sx={{
       minHeight: '100vh',
-      background: '#fafafa',
+      background: theme.palette.background.default,
       display: 'flex'
     }}>
       {/* Left Side - Branding */}
       <Box sx={{
         flex: 1,
-        background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+        background: isDarkMode
+          ? 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)'
+          : 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
         display: { xs: 'none', md: 'flex' },
         flexDirection: 'column',
         justifyContent: 'center',
@@ -125,11 +126,13 @@ const Login = () => {
         <Container maxWidth="sm">
           <Fade in timeout={800}>
             <Box sx={{
-              background: 'white',
+              background: theme.palette.background.paper,
               borderRadius: 3,
               p: { xs: 4, sm: 6 },
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-              border: '1px solid #e5e7eb',
+              boxShadow: isDarkMode
+                ? '0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2)'
+                : '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+              border: `1px solid ${theme.palette.border.main}`,
               maxWidth: 480,
               mx: 'auto'
             }}>
@@ -143,54 +146,7 @@ const Login = () => {
                 </Typography>
               </Box>
 
-              {/* Google Button */}
-              <Button
-                fullWidth
-                variant="outlined"
-                startIcon={<Google />}
-                onClick={handleGoogleLogin}
-                sx={{
-                  mb: 3,
-                  py: 1.5,
-                  textTransform: 'none',
-                  borderColor: '#e5e7eb',
-                  color: '#374151',
-                  fontWeight: 500,
-                  '&:hover': {
-                    borderColor: '#d1d5db',
-                    backgroundColor: '#f9fafb'
-                  }
-                }}
-              >
-                Continue with Google
-              </Button>
 
-              {/* Divider */}
-              <Box sx={{ position: 'relative', mb: 3 }}>
-                <Box sx={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: 0,
-                  right: 0,
-                  height: '1px',
-                  backgroundColor: '#e5e7eb'
-                }} />
-                <Typography
-                  variant="body2"
-                  sx={{
-                    textAlign: 'center',
-                    backgroundColor: 'white',
-                    px: 2,
-                    color: '#6b7280',
-                    display: 'inline-block',
-                    position: 'relative',
-                    left: '50%',
-                    transform: 'translateX(-50%)'
-                  }}
-                >
-                  or
-                </Typography>
-              </Box>
 
               {/* Error Alert */}
               {error && (
@@ -223,10 +179,10 @@ const Login = () => {
                       '& .MuiOutlinedInput-root': {
                         borderRadius: 2,
                         '& fieldset': {
-                          borderColor: '#e5e7eb',
+                          borderColor: theme.palette.border.main,
                         },
                         '&:hover fieldset': {
-                          borderColor: '#d1d5db',
+                          borderColor: theme.palette.border.dark,
                         },
                         '&.Mui-focused fieldset': {
                           borderColor: theme.palette.primary.main,
@@ -234,7 +190,7 @@ const Login = () => {
                         },
                       },
                       '& .MuiInputLabel-root': {
-                        color: '#6b7280',
+                        color: theme.palette.text.secondary,
                         '&.Mui-focused': {
                           color: theme.palette.primary.main,
                         },
@@ -257,7 +213,7 @@ const Login = () => {
                           <IconButton
                             onClick={() => setShowPassword(!showPassword)}
                             edge="end"
-                            sx={{ color: '#6b7280' }}
+                            sx={{ color: theme.palette.text.secondary }}
                           >
                             {showPassword ? <VisibilityOff /> : <Visibility />}
                           </IconButton>
@@ -268,10 +224,10 @@ const Login = () => {
                       '& .MuiOutlinedInput-root': {
                         borderRadius: 2,
                         '& fieldset': {
-                          borderColor: '#e5e7eb',
+                          borderColor: theme.palette.border.main,
                         },
                         '&:hover fieldset': {
-                          borderColor: '#d1d5db',
+                          borderColor: theme.palette.border.dark,
                         },
                         '&.Mui-focused fieldset': {
                           borderColor: theme.palette.primary.main,
@@ -279,7 +235,7 @@ const Login = () => {
                         },
                       },
                       '& .MuiInputLabel-root': {
-                        color: '#6b7280',
+                        color: theme.palette.text.secondary,
                         '&.Mui-focused': {
                           color: theme.palette.primary.main,
                         },
@@ -300,12 +256,13 @@ const Login = () => {
                       fontWeight: 600,
                       fontSize: '1rem',
                       borderRadius: 2,
-                      backgroundColor: '#1f2937',
+                      backgroundColor: isDarkMode ? '#ffffff' : '#1f2937',
+                      color: isDarkMode ? '#000000' : '#ffffff',
                       '&:hover': {
-                        backgroundColor: '#111827',
+                        backgroundColor: isDarkMode ? '#f3f4f6' : '#111827',
                       },
                       '&:disabled': {
-                        backgroundColor: '#9ca3af',
+                        backgroundColor: theme.palette.text.tertiary,
                       },
                     }}
                   >

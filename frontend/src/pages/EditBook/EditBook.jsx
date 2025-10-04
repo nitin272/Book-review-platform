@@ -1,6 +1,9 @@
 import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { useTheme } from '@mui/material/styles';
+import { useTheme as useCustomTheme } from '../../context/ThemeContext';
+import { bookAPI } from '../../services/api';
 import {
   Container,
   Box,
@@ -26,10 +29,11 @@ import './EditBook.scss';
 
 const EditBook = () => {
   const { id } = useParams();
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const { isDarkMode } = useCustomTheme();
 
-  // State management
   const [formData, setFormData] = useState({
     title: '',
     author: '',
@@ -41,12 +45,11 @@ const EditBook = () => {
     publisher: ''
   });
 
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Genre options
   const genres = [
     'Fiction',
     'Non-Fiction',
@@ -73,22 +76,28 @@ const EditBook = () => {
     'Other'
   ];
 
-  // Mock book data
-  const mockBook = {
-    _id: id,
-    title: 'The Great Gatsby',
-    author: 'F. Scott Fitzgerald',
-    description: 'Set in the summer of 1922, The Great Gatsby follows narrator Nick Carraway\'s interactions with his mysterious neighbor Jay Gatsby and Gatsby\'s obsession to reunite with his former lover, Daisy Buchanan.',
-    genre: 'Fiction',
-    publishedYear: 1925,
-    isbn: '978-0-7432-7356-5',
-    pages: 180,
-    publisher: 'Scribner',
-    addedBy: {
-      _id: 'user1',
-      name: 'John Doe'
-    }
+  const textFieldStyles = {
+    '& .MuiOutlinedInput-root': {
+      borderRadius: 2,
+      '& fieldset': {
+        borderColor: theme.palette.border.main,
+      },
+      '&:hover fieldset': {
+        borderColor: theme.palette.border.dark,
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: theme.palette.primary.main,
+      },
+    },
+    '& .MuiInputLabel-root': {
+      color: theme.palette.text.secondary,
+      '&.Mui-focused': {
+        color: theme.palette.primary.main,
+      },
+    },
   };
+
+
 
   useEffect(() => {
     fetchBookDetails();
@@ -97,35 +106,45 @@ const EditBook = () => {
   const fetchBookDetails = async () => {
     setFetchLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // Check if user can edit this book
-      if (user?.id !== mockBook.addedBy._id) {
-        setError('You are not authorized to edit this book.');
-        return;
+      const response = await bookAPI.getBook(id);
+      if (response.data.success) {
+        const book = response.data.data;
+
+
+        if (user?.id !== book.addedBy.id && user?.id !== book.addedBy._id) {
+          setError('You are not authorized to edit this book.');
+          return;
+        }
+
+        setFormData({
+          title: book.title,
+          author: book.author,
+          description: book.description,
+          genre: book.genre,
+          publishedYear: book.publishedYear.toString(),
+          isbn: book.isbn || '',
+          pages: book.pages?.toString() || '',
+          publisher: book.publisher || ''
+        });
+      } else {
+        setError('Book not found.');
       }
-      
-      // Populate form with existing data
-      setFormData({
-        title: mockBook.title,
-        author: mockBook.author,
-        description: mockBook.description,
-        genre: mockBook.genre,
-        publishedYear: mockBook.publishedYear.toString(),
-        isbn: mockBook.isbn || '',
-        pages: mockBook.pages?.toString() || '',
-        publisher: mockBook.publisher || ''
-      });
-      
     } catch (err) {
-      setError('Failed to fetch book details. Please try again.');
+      console.error('Error fetching book:', err);
+      setError(err.response?.data?.message || 'Failed to fetch book details. Please try again.');
     } finally {
       setFetchLoading(false);
     }
   };
 
-  // Redirect if not logged in
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   if (!user) {
     navigate('/login');
     return null;
@@ -137,21 +156,20 @@ const EditBook = () => {
       ...prev,
       [name]: value
     }));
-    
-    // Clear messages when user starts typing
+
     if (error) setError('');
     if (success) setSuccess('');
   };
 
   const validateForm = () => {
     const errors = [];
-    
+
     if (!formData.title.trim()) errors.push('Title is required');
     if (!formData.author.trim()) errors.push('Author is required');
     if (!formData.description.trim()) errors.push('Description is required');
     if (!formData.genre) errors.push('Genre is required');
     if (!formData.publishedYear) errors.push('Published year is required');
-    
+
     if (formData.publishedYear) {
       const year = parseInt(formData.publishedYear);
       const currentYear = new Date().getFullYear();
@@ -159,55 +177,51 @@ const EditBook = () => {
         errors.push('Please enter a valid published year');
       }
     }
-    
+
     if (formData.pages && parseInt(formData.pages) <= 0) {
       errors.push('Pages must be a positive number');
     }
-    
+
     if (formData.isbn && !/^[\d-]+$/.test(formData.isbn.replace(/\s/g, ''))) {
       errors.push('ISBN should contain only numbers and hyphens');
     }
-    
+
     return errors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
       setError(validationErrors.join(', '));
       return;
     }
-    
-    setLoading(true);
+
+    setSubmitting(true);
     setError('');
-    
+
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Mock successful response
-      const updatedBook = {
-        ...mockBook,
-        ...formData,
-        publishedYear: parseInt(formData.publishedYear),
-        pages: formData.pages ? parseInt(formData.pages) : null,
-        updatedAt: new Date().toISOString()
+      const bookData = {
+        title: formData.title,
+        author: formData.author,
+        description: formData.description,
+        genre: formData.genre,
+        publishedYear: parseInt(formData.publishedYear)
       };
-      
-      console.log('Book updated:', updatedBook);
+
+      await bookAPI.updateBook(id, bookData);
+
       setSuccess('Book updated successfully!');
-      
-      // Redirect to book details after a short delay
       setTimeout(() => {
         navigate(`/books/${id}`);
       }, 1500);
-      
+
     } catch (err) {
-      setError('Failed to update book. Please try again.');
+      console.error('Error updating book:', err);
+      setError(err.response?.data?.message || 'Failed to update book. Please try again.');
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -217,38 +231,51 @@ const EditBook = () => {
 
   if (fetchLoading) {
     return (
-      <Container maxWidth="md" sx={{ py: 4 }}>
-        <Skeleton variant="text" width="30%" height={40} sx={{ mb: 3 }} />
-        <Skeleton variant="text" width="50%" height={60} sx={{ mb: 2 }} />
-        <Skeleton variant="text" width="40%" height={30} sx={{ mb: 4 }} />
-        <Card sx={{ borderRadius: 3 }}>
-          <CardContent sx={{ p: 4 }}>
-            <Skeleton variant="text" width="40%" height={40} sx={{ mb: 4 }} />
-            <Grid container spacing={3}>
-              {[...Array(8)].map((_, index) => (
-                <Grid item xs={12} md={index < 2 ? 12 : 6} key={index}>
-                  <Skeleton variant="rectangular" height={56} sx={{ borderRadius: 2 }} />
-                </Grid>
-              ))}
-            </Grid>
-          </CardContent>
-        </Card>
-      </Container>
+      <Box sx={{ backgroundColor: theme.palette.background.default, minHeight: '100vh' }}>
+        <Container maxWidth="md" sx={{ py: 4 }}>
+          <Skeleton variant="text" width="30%" height={40} sx={{ mb: 3 }} />
+          <Skeleton variant="text" width="50%" height={60} sx={{ mb: 2 }} />
+          <Skeleton variant="text" width="40%" height={30} sx={{ mb: 4 }} />
+          <Card sx={{ 
+            borderRadius: 3, 
+            backgroundColor: theme.palette.background.paper,
+            border: `1px solid ${theme.palette.border.main}`
+          }}>
+            <CardContent sx={{ p: 4 }}>
+              <Skeleton variant="text" width="40%" height={40} sx={{ mb: 4 }} />
+              <Grid container spacing={3}>
+                {[...Array(8)].map((_, index) => (
+                  <Grid item xs={12} md={index < 2 ? 12 : 6} key={index}>
+                    <Skeleton variant="rectangular" height={56} sx={{ borderRadius: 2 }} />
+                  </Grid>
+                ))}
+              </Grid>
+            </CardContent>
+          </Card>
+        </Container>
+      </Box>
     );
   }
 
   return (
-    <div className="edit-book-page">
+    <Box 
+      className="edit-book-page"
+      sx={{
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary,
+        minHeight: '100vh'
+      }}
+    >
       <Container maxWidth="md" sx={{ py: 4 }}>
         {/* Breadcrumbs */}
         <Breadcrumbs
           separator={<NavigateNext fontSize="small" />}
           sx={{ mb: 3 }}
         >
-          <Link to="/books" style={{ textDecoration: 'none', color: '#6b7280' }}>
+          <Link to="/books" style={{ textDecoration: 'none', color: theme.palette.text.secondary }}>
             Books
           </Link>
-          <Link to={`/books/${id}`} style={{ textDecoration: 'none', color: '#6b7280' }}>
+          <Link to={`/books/${id}`} style={{ textDecoration: 'none', color: theme.palette.text.secondary }}>
             {formData.title || 'Book Details'}
           </Link>
           <Typography color="text.primary" fontWeight={600}>
@@ -264,15 +291,15 @@ const EditBook = () => {
             sx={{
               textTransform: 'none',
               fontWeight: 600,
-              color: '#6b7280',
+              color: theme.palette.text.secondary,
               '&:hover': {
-                backgroundColor: '#f9fafb'
+                backgroundColor: theme.palette.background.secondary
               }
             }}
           >
             Back
           </Button>
-          
+
           <Box sx={{ flex: 1 }}>
             <Typography variant="h3" fontWeight={800} color="text.primary" gutterBottom>
               Edit Book
@@ -285,8 +312,8 @@ const EditBook = () => {
 
         {/* Success/Error Messages */}
         {success && (
-          <Alert 
-            severity="success" 
+          <Alert
+            severity="success"
             sx={{ mb: 3, borderRadius: 2 }}
             onClose={() => setSuccess('')}
           >
@@ -295,8 +322,8 @@ const EditBook = () => {
         )}
 
         {error && (
-          <Alert 
-            severity="error" 
+          <Alert
+            severity="error"
             sx={{ mb: 3, borderRadius: 2 }}
             onClose={() => setError('')}
           >
@@ -305,21 +332,28 @@ const EditBook = () => {
         )}
 
         {/* Form Card */}
-        <Card sx={{ borderRadius: 3, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}>
+        <Card sx={{ 
+          borderRadius: 3, 
+          boxShadow: isDarkMode 
+            ? '0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2)'
+            : '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+          backgroundColor: theme.palette.background.paper,
+          border: `1px solid ${theme.palette.border.main}`
+        }}>
           <CardContent sx={{ p: 4 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 4 }}>
               <Box
                 sx={{
                   width: 48,
                   height: 48,
-                  backgroundColor: '#f3f4f6',
+                  backgroundColor: theme.palette.background.secondary,
                   borderRadius: 2,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}
               >
-                <MenuBook sx={{ fontSize: 24, color: '#6b7280' }} />
+                <MenuBook sx={{ fontSize: 24, color: theme.palette.text.secondary }} />
               </Box>
               <Typography variant="h5" fontWeight={700}>
                 Book Information
@@ -338,11 +372,7 @@ const EditBook = () => {
                     onChange={handleChange}
                     required
                     placeholder="Enter the book title"
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2
-                      }
-                    }}
+                    sx={textFieldStyles}
                   />
                 </Grid>
 
@@ -356,11 +386,7 @@ const EditBook = () => {
                     onChange={handleChange}
                     required
                     placeholder="Enter the author's name"
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2
-                      }
-                    }}
+                    sx={textFieldStyles}
                   />
                 </Grid>
 
@@ -374,11 +400,7 @@ const EditBook = () => {
                     value={formData.genre}
                     onChange={handleChange}
                     required
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2
-                      }
-                    }}
+                    sx={textFieldStyles}
                   >
                     {genres.map((genre) => (
                       <MenuItem key={genre} value={genre}>
@@ -400,11 +422,7 @@ const EditBook = () => {
                     onChange={handleChange}
                     required
                     placeholder="Enter a brief description of the book"
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2
-                      }
-                    }}
+                    sx={textFieldStyles}
                   />
                 </Grid>
 
@@ -419,15 +437,13 @@ const EditBook = () => {
                     onChange={handleChange}
                     required
                     placeholder="e.g., 2023"
-                    inputProps={{
-                      min: 1000,
-                      max: new Date().getFullYear()
-                    }}
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2
+                    slotProps={{
+                      htmlInput: {
+                        min: 1000,
+                        max: new Date().getFullYear()
                       }
                     }}
+                    sx={textFieldStyles}
                   />
                 </Grid>
 
@@ -441,14 +457,12 @@ const EditBook = () => {
                     value={formData.pages}
                     onChange={handleChange}
                     placeholder="e.g., 350"
-                    inputProps={{
-                      min: 1
-                    }}
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2
+                    slotProps={{
+                      htmlInput: {
+                        min: 1
                       }
                     }}
+                    sx={textFieldStyles}
                   />
                 </Grid>
 
@@ -461,11 +475,7 @@ const EditBook = () => {
                     value={formData.isbn}
                     onChange={handleChange}
                     placeholder="e.g., 978-0-123456-78-9"
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2
-                      }
-                    }}
+                    sx={textFieldStyles}
                   />
                 </Grid>
 
@@ -478,11 +488,7 @@ const EditBook = () => {
                     value={formData.publisher}
                     onChange={handleChange}
                     placeholder="Enter the publisher's name"
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2
-                      }
-                    }}
+                    sx={textFieldStyles}
                   />
                 </Grid>
               </Grid>
@@ -493,45 +499,46 @@ const EditBook = () => {
                   type="button"
                   variant="outlined"
                   onClick={handleCancel}
-                  disabled={loading}
+                  disabled={submitting}
                   sx={{
                     borderRadius: 2,
                     textTransform: 'none',
                     fontWeight: 600,
                     px: 4,
                     py: 1.5,
-                    borderColor: '#e5e7eb',
-                    color: '#6b7280',
+                    borderColor: theme.palette.border.main,
+                    color: theme.palette.text.secondary,
                     '&:hover': {
-                      borderColor: '#d1d5db',
-                      backgroundColor: '#f9fafb'
+                      borderColor: theme.palette.border.dark,
+                      backgroundColor: theme.palette.background.secondary
                     }
                   }}
                 >
                   Cancel
                 </Button>
-                
+
                 <Button
                   type="submit"
                   variant="contained"
-                  disabled={loading}
-                  startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <Save />}
+                  disabled={submitting}
+                  startIcon={submitting ? <CircularProgress size={20} color="inherit" /> : <Save />}
                   sx={{
                     borderRadius: 2,
                     textTransform: 'none',
                     fontWeight: 600,
                     px: 4,
                     py: 1.5,
-                    backgroundColor: '#1f2937',
+                    backgroundColor: isDarkMode ? '#ffffff' : '#1f2937',
+                    color: isDarkMode ? '#000000' : '#ffffff',
                     '&:hover': {
-                      backgroundColor: '#111827'
+                      backgroundColor: isDarkMode ? '#f3f4f6' : '#111827'
                     },
                     '&:disabled': {
-                      backgroundColor: '#9ca3af'
+                      backgroundColor: theme.palette.text.tertiary
                     }
                   }}
                 >
-                  {loading ? 'Updating...' : 'Update Book'}
+                  {submitting ? 'Updating...' : 'Update Book'}
                 </Button>
               </Box>
             </Box>
@@ -539,7 +546,13 @@ const EditBook = () => {
         </Card>
 
         {/* Help Text */}
-        <Box sx={{ mt: 4, p: 3, backgroundColor: '#f9fafb', borderRadius: 2 }}>
+        <Box sx={{ 
+          mt: 4, 
+          p: 3, 
+          backgroundColor: theme.palette.background.secondary, 
+          borderRadius: 2,
+          border: `1px solid ${theme.palette.border.main}`
+        }}>
           <Typography variant="h6" fontWeight={600} gutterBottom>
             Editing Guidelines:
           </Typography>
@@ -551,7 +564,7 @@ const EditBook = () => {
           </Typography>
         </Box>
       </Container>
-    </div>
+    </Box>
   );
 };
 

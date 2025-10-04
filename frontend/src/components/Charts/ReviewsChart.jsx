@@ -7,6 +7,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { Box, useTheme } from '@mui/material';
@@ -19,51 +20,65 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
-const ReviewsChart = ({ reviews }) => {
+const ReviewsChart = ({ reviews = [] }) => {
   const theme = useTheme();
   const { isDarkMode } = useCustomTheme();
-  // Generate weekly review data for the last 8 weeks
+  
   const generateWeeklyData = () => {
     const weeks = [];
     const reviewCounts = [];
     const now = new Date();
 
+
+    console.log('Reviews data for chart:', reviews);
+
     for (let i = 7; i >= 0; i--) {
       const weekStart = new Date(now);
       weekStart.setDate(now.getDate() - (i * 7));
+      weekStart.setHours(0, 0, 0, 0); 
+      
       const weekEnd = new Date(weekStart);
       weekEnd.setDate(weekStart.getDate() + 6);
+      weekEnd.setHours(23, 59, 59, 999); 
 
-      const weekLabel = `Week ${8 - i}`;
+  
+      const weekLabel = `${(weekStart.getMonth() + 1).toString().padStart(2, '0')}/${weekStart.getDate().toString().padStart(2, '0')}`;
       weeks.push(weekLabel);
-
-      // Count reviews in this week (mock data for demo)
+      
       const reviewsInWeek = reviews.filter(review => {
+        if (!review.createdAt) return false;
+        
         const reviewDate = new Date(review.createdAt);
-        return reviewDate >= weekStart && reviewDate <= weekEnd;
-      }).length;
+        const isInRange = reviewDate >= weekStart && reviewDate <= weekEnd;
+        
 
-      // Add some mock variation for better visualization
-      const mockCount = Math.floor(Math.random() * 4) + reviewsInWeek + 1;
-      reviewCounts.push(mockCount);
+        if (isInRange) {
+          console.log(`Review from ${reviewDate.toLocaleDateString()} falls in week ${weekLabel}`);
+        }
+        
+        return isInRange;
+      }).length;
+      
+      reviewCounts.push(reviewsInWeek);
     }
 
+    console.log('Generated chart data:', { weeks, reviewCounts });
     return { weeks, reviewCounts };
   };
 
   const { weeks, reviewCounts } = generateWeeklyData();
 
-  // Weekly Reviews Line Chart
   const weeklyReviewsData = {
     labels: weeks,
     datasets: [
       {
         label: 'Reviews Written',
         data: reviewCounts,
-        borderColor: isDarkMode ? '#60a5fa' : '#3b82f6', // Blue color that works well in both themes
+        borderColor: isDarkMode ? '#60a5fa' : '#3b82f6', 
         backgroundColor: isDarkMode ? 'rgba(96, 165, 250, 0.1)' : 'rgba(59, 130, 246, 0.1)',
         borderWidth: 3,
         fill: true,
@@ -117,19 +132,37 @@ const ReviewsChart = ({ reviews }) => {
           font: {
             size: 10,
           },
+          stepSize: 1,
         },
         beginAtZero: true,
+        max: Math.max(...reviewCounts) + 1 || 5,
       },
     },
   };
 
   return (
-    <Box sx={{ height: '100%' }}>
+    <Box sx={{ height: '100%', position: 'relative' }}>
       <Line 
-        key={isDarkMode ? 'dark' : 'light'} // Force re-render when theme changes
+        key={`${isDarkMode ? 'dark' : 'light'}-${reviews.length}`}
         data={weeklyReviewsData} 
         options={chartOptions} 
       />
+      {reviews.length === 0 && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            textAlign: 'center',
+            color: theme.palette.text.secondary,
+            fontSize: '0.875rem',
+            pointerEvents: 'none'
+          }}
+        >
+          No review data yet
+        </Box>
+      )}
     </Box>
   );
 };

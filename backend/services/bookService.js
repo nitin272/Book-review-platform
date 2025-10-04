@@ -10,7 +10,7 @@ import {
 export const createBookService = async (bookData, userId) => {
   const { title, author, description, genre, publishedYear } = bookData;
 
-  // Validation
+
   if (!title || title.trim().length < 1) {
     throw new Error('Title is required');
   }
@@ -95,19 +95,19 @@ export const getBookByIdService = async (bookId) => {
 
 export const updateBookService = async (bookId, updateData, userId) => {
   const book = await findBookById(bookId);
+  
   if (!book) {
     throw new Error('Book not found');
   }
 
-  // Check if user is the owner
-  if (book.addedBy._id.toString() !== userId) {
+  
+  if (book.addedBy._id.toString() !== userId.toString()) {
     throw new Error('You can only edit books you added');
   }
 
   const { title, author, description, genre, publishedYear } = updateData;
   const updates = {};
 
-  // Validate and update fields
   if (title) {
     if (title.trim().length < 1) {
       throw new Error('Title is required');
@@ -166,8 +166,7 @@ export const deleteBookService = async (bookId, userId) => {
     throw new Error('Book not found');
   }
 
-  // Check if user is the owner
-  if (book.addedBy._id.toString() !== userId) {
+  if (book.addedBy._id.toString() !== userId.toString()) {
     throw new Error('You can only delete books you added');
   }
 

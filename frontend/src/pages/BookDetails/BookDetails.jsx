@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import { bookAPI, reviewAPI } from '../../services/api';
 import { useTheme } from '@mui/material/styles';
 import { useTheme as useCustomTheme } from '../../context/ThemeContext';
 import {
@@ -48,7 +49,9 @@ const BookDetails = () => {
   const theme = useTheme();
   const { isDarkMode } = useCustomTheme();
 
-  // State management
+
+
+
   const [book, setBook] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -57,92 +60,60 @@ const BookDetails = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  // Mock data for now
-  const mockBook = {
-    _id: id,
-    title: 'The Great Gatsby',
-    author: 'F. Scott Fitzgerald',
-    description: 'Set in the summer of 1922, The Great Gatsby follows narrator Nick Carraway\'s interactions with his mysterious neighbor Jay Gatsby and Gatsby\'s obsession to reunite with his former lover, Daisy Buchanan. The novel explores themes of decadence, idealism, resistance to change, social upheaval, and excess, creating a portrait of the Roaring Twenties that has been described as a cautionary tale regarding the American Dream.',
-    genre: 'Fiction',
-    publishedYear: 1925,
-    averageRating: 4.2,
-    reviewCount: 156,
-    addedBy: {
-      _id: 'user1',
-      name: 'John Doe',
-      email: 'john@example.com'
-    },
-    createdAt: '2024-01-15',
-    isbn: '978-0-7432-7356-5',
-    pages: 180,
-    publisher: 'Scribner'
-  };
 
-  const mockReviews = [
-    {
-      _id: 'review1',
-      userId: {
-        _id: 'user2',
-        name: 'Alice Johnson',
-        email: 'alice@example.com'
-      },
-      rating: 5,
-      reviewText: 'An absolute masterpiece! Fitzgerald\'s prose is beautiful and the story is both tragic and compelling. The symbolism and themes are incredibly deep.',
-      createdAt: '2024-01-20',
-      updatedAt: '2024-01-20'
-    },
-    {
-      _id: 'review2',
-      userId: {
-        _id: 'user3',
-        name: 'Bob Smith',
-        email: 'bob@example.com'
-      },
-      rating: 4,
-      reviewText: 'Great book with excellent character development. The ending was quite impactful, though some parts felt a bit slow.',
-      createdAt: '2024-01-18',
-      updatedAt: '2024-01-18'
-    },
-    {
-      _id: 'review3',
-      userId: {
-        _id: 'user4',
-        name: 'Carol Davis',
-        email: 'carol@example.com'
-      },
-      rating: 4,
-      reviewText: 'A classic for a reason. The writing style is captivating and the themes are still relevant today.',
-      createdAt: '2024-01-16',
-      updatedAt: '2024-01-16'
-    }
-  ];
 
   useEffect(() => {
-    fetchBookDetails();
-    fetchReviews();
+
+    if (id && id !== 'undefined') {
+      fetchBookDetails();
+      fetchReviews();
+    } else {
+
+      setError('Invalid book ID. Please check the URL.');
+      setLoading(false);
+    }
   }, [id]);
 
   const fetchBookDetails = async () => {
+    if (!id || id === 'undefined') {
+      setError('Invalid book ID');
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 800));
-      setBook(mockBook);
-      setError('');
+
+      const response = await bookAPI.getBook(id);
+      if (response.data.success) {
+        setBook(response.data.data);
+        setError('');
+      } else {
+        setError('Book not found.');
+      }
     } catch (err) {
-      setError('Failed to fetch book details. Please try again.');
+      console.error('Error fetching book:', err);
+      setError(err.response?.data?.message || 'Failed to fetch book details. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   const fetchReviews = async () => {
+    if (!id || id === 'undefined') {
+
+      return;
+    }
+
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setReviews(mockReviews);
+
+      const response = await reviewAPI.getBookReviews(id);
+      if (response.data.success) {
+        setReviews(response.data.data.reviews || []);
+      }
     } catch (err) {
       console.error('Failed to fetch reviews:', err);
+      setReviews([]);
     }
   };
 
@@ -166,8 +137,7 @@ const BookDetails = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      // API call to delete book
-      console.log('Deleting book:', id);
+
       navigate('/books');
     } catch (err) {
       setError('Failed to delete book. Please try again.');
@@ -177,7 +147,6 @@ const BookDetails = () => {
 
   const handleFavoriteToggle = () => {
     setIsFavorite(!isFavorite);
-    // API call to toggle favorite
   };
 
   const getRatingDistribution = () => {
@@ -207,8 +176,6 @@ const BookDetails = () => {
         <Container maxWidth="lg" sx={{ py: { xs: 2, md: 4 } }}>
           {/* Back button skeleton */}
           <Skeleton variant="text" width={120} height={32} sx={{ mb: 3 }} />
-
-          {/* Book header skeleton */}
           <Box sx={{ mb: 4 }}>
             <Grid container spacing={4}>
               <Grid item xs={12} md={3}>
@@ -325,7 +292,7 @@ const BookDetails = () => {
   }
 
   const ratingDistribution = getRatingDistribution();
-  const canEdit = user && book && user.id === book.addedBy._id;
+  const canEdit = user && book && book.addedBy && (user.id === book.addedBy.id || user.id === book.addedBy._id);
 
   return (
     <Box
@@ -572,11 +539,11 @@ const BookDetails = () => {
                             height: 40
                           }}
                         >
-                          {review.userId.name.charAt(0).toUpperCase()}
+                          {review.user?.name?.charAt(0).toUpperCase() || review.userId?.name?.charAt(0).toUpperCase() || 'U'}
                         </Avatar>
                         <Box>
                           <Typography variant="subtitle1" fontWeight={600} color={theme.palette.text.primary}>
-                            {review.userId.name}
+                            {review.user?.name || review.userId?.name || 'Anonymous'}
                           </Typography>
                           <Typography variant="body2" color={theme.palette.text.tertiary}>
                             {formatDate(review.createdAt)}

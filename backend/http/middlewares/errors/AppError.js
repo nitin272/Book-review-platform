@@ -10,7 +10,7 @@ export class AppError extends Error {
   }
 }
 
-// Specific error classes
+
 export class ValidationError extends AppError {
   constructor(message) {
     super(message, 400);

@@ -76,9 +76,9 @@ export const updateBookController = async (req, res) => {
       data: book,
     });
   } catch (error) {
-    const statusCode = error.message.includes('not found') ? 404 : 
-                      error.message.includes('only edit') ? 403 : 400;
-    
+    const statusCode = error.message.includes('not found') ? 404 :
+      error.message.includes('only edit') ? 403 : 400;
+
     res.status(statusCode).json({
       success: false,
       message: error.message || "Book update failed",
@@ -95,9 +95,9 @@ export const deleteBookController = async (req, res) => {
       message: result.message,
     });
   } catch (error) {
-    const statusCode = error.message.includes('not found') ? 404 : 
-                      error.message.includes('only delete') ? 403 : 400;
-    
+    const statusCode = error.message.includes('not found') ? 404 :
+      error.message.includes('only delete') ? 403 : 400;
+
     res.status(statusCode).json({
       success: false,
       message: error.message || "Book deletion failed",
