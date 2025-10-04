@@ -1,0 +1,47 @@
+.review-page {
+  min-height: 100vh;
+  background: #fafafa;
+}
+
+// Form styling enhancements
+.review-page {
+  .MuiTextField-root {
+    .MuiOutlinedInput-root {
+      transition: all 0.2s ease;
+      
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      
+      &.Mui-focused {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+  
+  .MuiRating-root {
+    .MuiRating-icon {
+      transition: all 0.2s ease;
+      
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .review-page {
+    .MuiContainer-root {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    
+    .MuiCard-root .MuiCardContent-root {
+      padding: 2rem 1.5rem;
+    }
+  }
+}

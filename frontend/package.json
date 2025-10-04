@@ -16,8 +16,10 @@
     "@mui/lab": "^7.0.1-beta.18",
     "@mui/material": "^7.3.4",
     "axios": "^1.12.2",
+    "chart.js": "^4.4.1",
     "gsap": "^3.13.0",
     "react": "^19.1.1",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.3",
     "sass": "^1.93.2"

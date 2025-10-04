@@ -13,12 +13,8 @@ import {
   MenuItem,
   IconButton,
   Drawer,
-  List,
-  ListItem,
-  ListItemText,
   useTheme,
   useMediaQuery,
-  Chip,
   Divider,
   Badge,
   Fade
@@ -67,7 +63,7 @@ const Navbar = () => {
   const isActive = (path) => location.pathname === path;
 
   const navItems = [
-    { label: 'Discover', path: '/books', description: 'Browse books' },
+    { label: 'Books', path: '/books', description: 'Browse books' },
     { label: 'Community', path: '/community', description: 'Join discussions' },
     { label: 'Reviews', path: '/reviews', description: 'Read reviews' }
   ];
