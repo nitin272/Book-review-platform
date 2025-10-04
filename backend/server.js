@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: ["http://localhost:4500","https://book-review-platform.pages.dev/"],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
