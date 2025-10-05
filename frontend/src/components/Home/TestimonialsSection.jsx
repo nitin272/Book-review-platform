@@ -79,7 +79,7 @@ const TestimonialsSection = () => {
                 position: 'relative',
                 overflow: 'hidden',
                 '&::before': {
-                  content: '"',
+                  content: '"“"',
                   position: 'absolute',
                   top: '1rem',
                   left: '2rem',
