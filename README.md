@@ -6,7 +6,7 @@ A comprehensive full-stack MERN application for book enthusiasts to discover, re
 
 - **Frontend**: [https://book-review-platform.pages.dev](https://book-review-platform.pages.dev)
 - **Backend API**: [https://book-review-platform-nekp.onrender.com](https://book-review-platform-nekp.onrender.com)
-- **API Documentation**: [View Complete API Docs](https://documenter.getpostman.com/view/your-postman-collection-id)
+- **API Documentation**: [View Complete API Docs](https://documenter.getpostman.com/view/32417335/2sB3QGuXcT)
 
 ## ✨ Features
 
@@ -27,7 +27,7 @@ A comprehensive full-stack MERN application for book enthusiasts to discover, re
 - 📱 **Responsive Design** - Mobile-first approach with Material-UI components
 - ⚡ **Performance Optimized** - Redis caching and optimized database queries
 
-## � TUech Stack
+## � Tech Stack
 
 **Frontend:** React 19, Material-UI, React Router, Context API, Chart.js, Axios, SCSS, Vite  
 **Backend:** Node.js, Express.js, MongoDB Atlas, Mongoose, JWT, bcrypt, Redis, Winston  
@@ -42,7 +42,7 @@ A comprehensive full-stack MERN application for book enthusiasts to discover, re
 
 ### 1. Clone & Install
 ```bash
-git clone https://github.com/your-username/book-review-platform.git
+git clone https://github.com/nitin272/book-review-platform.git
 cd book-review-platform
 
 # Backend setup
@@ -99,7 +99,7 @@ npm run dev
 | `DELETE` | `/reviews/:id` | Delete review | ✅ |
 
 ### 📖 Complete Documentation
-**[View Full API Documentation →](https://documenter.getpostman.com/view/your-postman-collection-id)**
+**[View Full API Documentation →](https://documenter.getpostman.com/view/32417335/2sB3QGuXcT)**
 
 Includes detailed request/response examples, authentication flows, error handling, and interactive testing.
 
@@ -186,9 +186,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ## 👨‍💻 Author
 
 **Your Name**  
-📧 [your.email@example.com](mailto:your.email@example.com)  
-🐙 [GitHub](https://github.com/your-username)  
-💼 [LinkedIn](https://linkedin.com/in/your-profile)
+📧 [your.email@example.com](mailto:nitinsoni95092@gmail.com)  
+🐙 [GitHub](https://github.com/nitin272)  
 
 ---
 
