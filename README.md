@@ -186,7 +186,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ## 👨‍💻 Author
 
 **Your Name**  
-📧 [your.email@example.com](mailto:nitinsoni95092@gmail.com)  
+📧 [Email](mailto:nitinsoni95092@gmail.com)  
 🐙 [GitHub](https://github.com/nitin272)  
 
 ---
