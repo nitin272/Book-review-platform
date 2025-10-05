@@ -34,7 +34,6 @@ const ReviewsChart = ({ reviews = [] }) => {
     const now = new Date();
 
 
-    console.log('Reviews data for chart:', reviews);
 
     for (let i = 7; i >= 0; i--) {
       const weekStart = new Date(now);
@@ -66,7 +65,6 @@ const ReviewsChart = ({ reviews = [] }) => {
       reviewCounts.push(reviewsInWeek);
     }
 
-    console.log('Generated chart data:', { weeks, reviewCounts });
     return { weeks, reviewCounts };
   };
 

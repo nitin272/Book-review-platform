@@ -25,7 +25,7 @@ const RatingDistributionChart = ({ reviews = [] }) => {
   const { isDarkMode } = useCustomTheme();
 
   const generateRatingData = () => {
-    const ratingCounts = [0, 0, 0, 0, 0]; // For ratings 1-5
+    const ratingCounts = [0, 0, 0, 0, 0]; 
     
     reviews.forEach(review => {
       if (review.rating >= 1 && review.rating <= 5) {
@@ -46,11 +46,11 @@ const RatingDistributionChart = ({ reviews = [] }) => {
         label: 'Number of Reviews',
         data: ratingCounts,
         backgroundColor: [
-          'rgba(239, 68, 68, 0.8)',   // Red for 1 star
-          'rgba(245, 158, 11, 0.8)',  // Orange for 2 stars
-          'rgba(251, 191, 36, 0.8)',  // Yellow for 3 stars
-          'rgba(34, 197, 94, 0.8)',   // Green for 4 stars
-          'rgba(16, 185, 129, 0.8)',  // Emerald for 5 stars
+          'rgba(239, 68, 68, 0.8)',   
+          'rgba(245, 158, 11, 0.8)',  
+          'rgba(251, 191, 36, 0.8)',  
+          'rgba(34, 197, 94, 0.8)',   
+          'rgba(16, 185, 129, 0.8)', 
         ],
         borderColor: [
           'rgba(239, 68, 68, 1)',
